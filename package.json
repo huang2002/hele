@@ -1,6 +1,6 @@
 {
     "name": "hele",
-    "version": "0.1.2",
+    "version": "0.1.3",
     "description": "A front-end UI lib.",
     "main": "dist/hele.umd.min.js",
     "module": "dist/hele.min.js",
@@ -20,8 +20,7 @@
         "component",
         "jsx",
         "tsx",
-        "virtual",
-        "dom",
+        "virtual-dom",
         "lightweight",
         "ui",
         "h5",

@@ -1,7 +1,8 @@
 const h = HEle.createElement,
-    { Component, Fragment } = HEle;
+    { Component, Fragment, Reference } = HEle;
 
-const appRef = new HEle.Reference();
+const appRef = new Reference(),
+    clockRef = new Reference();
 
 function logHooks(componentConstructor) {
     Object.assign(componentConstructor.prototype, {
@@ -124,6 +125,7 @@ class Clock extends Component {
         return h(
             'p',
             {
+                id: 'clock',
                 title: 'Current time.'
             },
             this.states.date.toString()
@@ -154,7 +156,12 @@ HEle.render(
                 ref: appRef
             }
         ),
-        h(Clock)
+        h(
+            Clock,
+            {
+                ref: clockRef
+            }
+        )
     ),
     document.getElementById('root')
 );

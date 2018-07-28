@@ -1,3 +1,7 @@
+### 0.1.3 - 2018-07-28
+
+- Update keywords
+
 ### 0.1.2 - 2018-07-28
 
 - Fix .npmignore
