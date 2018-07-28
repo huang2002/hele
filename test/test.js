@@ -102,8 +102,8 @@ class App extends Component {
                 'h1',
                 {
                     title: this.props.title,
-                    onmouseenterCapture(e) { console.log('[Mouseenter]', e); },
-                    onmouseoutOnce(e) { console.log('[Mouseout]', e); }
+                    onmouseenterCapture(e) { console.log('[ Mouseenter ]', e); },
+                    onmouseoutOnce(e) { console.log('[ Mouseout ]', e); }
                 },
                 'Hello, world!'
             ),
