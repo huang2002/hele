@@ -64,7 +64,7 @@ Here's the HelloWorld:
 
 # Docs
 
-Docs haven't been finished yet, so you may read [the declaration files](typings) to learn the APIs at present.
+Docs haven't been finished yet, so you may read [`test.js`](test/test.js) to learn the APIs at present.
 
 # Changelog
 
