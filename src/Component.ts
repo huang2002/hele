@@ -3,10 +3,6 @@ import { Reference } from "./Reference";
 import { isEqual } from "./utils";
 import { Ticker } from "./Ticker";
 
-export interface States {
-    [key: string]: any;
-}
-
 export interface ComponentConstructor {
     new(props: Props): Component;
     defaultProps: RawProps;
@@ -14,7 +10,7 @@ export interface ComponentConstructor {
 export type ComponentFactory = (props: Props) => any;
 export type ComponentGetter = ComponentConstructor | ComponentFactory;
 
-export type UpdateRequestCallback = (oldStates: States) => States;
+export type UpdateRequestCallback = (oldStates: any) => any;
 
 export abstract class Component<T = {}> {
 
@@ -24,7 +20,7 @@ export abstract class Component<T = {}> {
 
     static defaultProps: RawProps = {};
 
-    states: States = {};
+    states: any = {};
     refs = new Map<string, Reference>();
     updateRequestCallbacks = new Array<UpdateRequestCallback>();
 
@@ -41,7 +37,7 @@ export abstract class Component<T = {}> {
 
     onWillMount() { }
     onDidMount() { }
-    shouldUpdate(oldStates: States & T, newStates: States & T) {
+    shouldUpdate(oldStates: any, newStates: any) {
         return !isEqual(oldStates, newStates);
     }
     onWillUpdate(): any { }
@@ -63,7 +59,7 @@ export abstract class Component<T = {}> {
         Ticker.updateComponent(this);
         return this;
     }
-    update(newStates: States & T) {
+    update(newStates: any) {
         return this.requestUpdate(() => newStates);
     }
 

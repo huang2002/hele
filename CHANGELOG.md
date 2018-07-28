@@ -1,3 +1,8 @@
+### 0.1.6 - 2018-07-28
+
+- Update README.md & package.json
+- Fix some type declarations
+
 ### 0.1.5 - 2018-07-28
 
 - Fix a bug in handling props

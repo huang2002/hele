@@ -1,6 +1,6 @@
 {
     "name": "hele",
-    "version": "0.1.5",
+    "version": "0.1.6",
     "description": "A front-end UI lib.",
     "main": "dist/hele.umd.min.js",
     "module": "dist/hele.min.js",
@@ -31,7 +31,7 @@
     "bugs": {
         "url": "https://github.com/huang2002/hele/issues"
     },
-    "homepage": "https://github.com/huang2002/hele#readme",
+    "homepage": "https://github.com/huang2002/hele/wiki",
     "devDependencies": {
         "babel-core": "^6.26.3",
         "babel-plugin-external-helpers": "^6.22.0",
