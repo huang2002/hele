@@ -73,7 +73,9 @@ class Greeting extends Component {
                 'Hi, ',
                 h(
                     GreetingTarget,
-                    null,
+                    {
+                        ref: this.createRef('greetingTarget')
+                    },
                     this.states.target
                 ),
                 '.'

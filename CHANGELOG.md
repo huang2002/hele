@@ -1,3 +1,7 @@
+### 0.1.5 - 2018-07-28
+
+- Fix a bug in handling props
+
 ### 0.1.4 - 2018-07-28
 
 - Update README.md

@@ -39,6 +39,11 @@ export const specialComponentPropProcessors = new Map<string, SpecialPropProcess
         ref.current = component;
     }]
 ]);
+export const specialFactoryPropProcessors = new Map<string, SpecialPropProcessor<undefined>>([
+    ['ref', (ref: Reference) => {
+        ref.current = undefined;
+    }]
+]);
 
 const eventPattern = /^on(\w+)$/i,
     captruePattern = /capture/i,
@@ -96,18 +101,18 @@ export interface ApplyPropsToComponentResult {
 export function applyPropsToComponent(props: Props, componentGetter: ComponentGetter) {
     props = { ...props };
 
-    const specialProps = new Map<any, SpecialPropProcessor<Component>>();
-    for (const key in props) {
-        const processor = specialComponentPropProcessors.get(key);
-        if (processor) {
-            specialProps.set(props[key], processor);
-            delete props[key];
-        }
-    }
 
     const result: ApplyPropsToComponentResult = { element: null, component: null };
 
     if (componentGetter.prototype instanceof Component) {
+        const specialProps = new Map<any, SpecialPropProcessor<Component>>();
+        for (const key in props) {
+            const processor = specialComponentPropProcessors.get(key);
+            if (processor) {
+                specialProps.set(props[key], processor);
+                delete props[key];
+            }
+        }
         const component = result.component = new (componentGetter as ComponentConstructor)(props);
         specialProps.forEach((processor, value) => {
             processor(value, component);
@@ -119,6 +124,13 @@ export function applyPropsToComponent(props: Props, componentGetter: ComponentGe
         }
         result.element = component.toElement();
     } else {
+        for (const key in props) {
+            const processor = specialFactoryPropProcessors.get(key);
+            if (processor) {
+                processor(props[key], undefined);
+                delete props[key];
+            }
+        }
         const element = (componentGetter as ComponentFactory)(props);
         result.element = element;
     }
