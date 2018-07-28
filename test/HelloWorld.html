@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>HEle-HelloWorld</title>
+</head>
+
+<body>
+    <!-- The container: -->
+    <div id="root"></div>
+    <!-- Load the lib from the CDN: -->
+    <script crossorigin="anonymous" src="https://unpkg.com/hele"></script>
+    <!-- Codes start here: -->
+    <script>
+        HEle.render(
+            HEle.createElement(
+                'h1',
+                null,
+                'Hello, world!'
+            ),
+            document.getElementById('root')
+        );
+        // Now the root element will be:
+        // <div id="root">
+        //     <h1>Hello, world!</h1>
+        // </div>
+    </script>
+</body>
+
+</html>
