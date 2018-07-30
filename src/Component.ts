@@ -3,16 +3,16 @@ import { Reference } from "./Reference";
 import { isEqual } from "./utils";
 import { Ticker } from "./Ticker";
 
-export interface ComponentConstructor {
-    new(props: Props): Component;
+export interface ComponentConstructor<T extends Props = Props> {
+    new(props: Props & T): Component<T>;
     defaultProps: RawProps;
 }
-export type ComponentFactory = (props: Props) => any;
-export type ComponentGetter = ComponentConstructor | ComponentFactory;
+export type ComponentFactory<T extends Props = Props> = (props: Props & T) => any;
+export type ComponentGetter<T extends Props = Props> = ComponentConstructor<T> | ComponentFactory<T>;
 
 export type UpdateRequestCallback = (oldStates: any) => any;
 
-export abstract class Component<T = {}> {
+export abstract class Component<T extends Props = Props> {
 
     constructor(
         public readonly props: Props & T

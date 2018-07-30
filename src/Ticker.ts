@@ -83,7 +83,7 @@ export const Ticker = {
                     elementMap.forEach((element, component) => {
                         const { node } = element;
                         if (node) {
-                            const nodes = flatten<Node, Node>([node]);
+                            const nodes = flatten<Node>([node]);
                             if (nodes.some(n => !n.parentNode)) {
                                 nodes.forEach(n => {
                                     clearChildNodes(n);

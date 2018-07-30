@@ -94,15 +94,14 @@ export function applyPropsToNode(props: Props, node: Node) {
     }
 }
 
-export interface ApplyPropsToComponentResult {
+export interface ApplyPropsToComponentResult<T extends Props = Props> {
     element: any;
-    component: Component | null;
+    component: Component<T> | null;
 }
-export function applyPropsToComponent(props: Props, componentGetter: ComponentGetter) {
-    props = { ...props };
+export function applyPropsToComponent<T extends Props = Props>(props: Props & T, componentGetter: ComponentGetter<T>) {
+    props = Object.assign({}, props);
 
-
-    const result: ApplyPropsToComponentResult = { element: null, component: null };
+    const result: ApplyPropsToComponentResult<T> = { element: null, component: null };
 
     if (componentGetter.prototype instanceof Component) {
         const specialProps = new Map<any, SpecialPropProcessor<Component>>();
@@ -113,7 +112,7 @@ export function applyPropsToComponent(props: Props, componentGetter: ComponentGe
                 delete props[key];
             }
         }
-        const component = result.component = new (componentGetter as ComponentConstructor)(props);
+        const component = result.component = new (componentGetter as ComponentConstructor<T>)(props);
         specialProps.forEach((processor, value) => {
             processor(value, component);
         });
@@ -131,7 +130,7 @@ export function applyPropsToComponent(props: Props, componentGetter: ComponentGe
                 delete props[key];
             }
         }
-        const element = (componentGetter as ComponentFactory)(props);
+        const element = (componentGetter as ComponentFactory<T>)(props);
         result.element = element;
     }
 

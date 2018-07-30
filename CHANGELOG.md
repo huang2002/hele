@@ -1,3 +1,8 @@
+## 0.2.0 - 2018-07-30
+
+- Add Portal
+- Improve some type declarations
+
 ### 0.1.6 - 2018-07-28
 
 - Update README.md & package.json

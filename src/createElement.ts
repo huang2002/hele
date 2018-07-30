@@ -1,14 +1,14 @@
-import { RawProps } from "./props";
+import { RawProps, Props } from "./props";
 import { ComponentGetter } from "./Component";
 import { HElement } from "./HElement";
 import { flatten } from "./utils";
 
-export function createElement(type: string | ComponentGetter, props?: RawProps, ...children: any[]) {
-    return new HElement(
+export function createElement<T = RawProps>(type: string | ComponentGetter<T & Props>, props?: RawProps & T, ...children: any[]) {
+    return new HElement<T & Props>(
         type,
         {
-            ...props,
+            ...(props || {}),
             children: flatten(children)
-        }
+        } as T & Props
     );
 }

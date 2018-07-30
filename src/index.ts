@@ -6,5 +6,6 @@ export * from "./Fragment";
 export * from "./HElement";
 export * from "./Reference";
 export * from "./render";
+export * from "./Portal";
 export * from "./createElement";
 export * from "./createFactory";

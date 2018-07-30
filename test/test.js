@@ -1,5 +1,5 @@
 const h = HEle.createElement,
-    { Component, Fragment, Reference } = HEle;
+    { Component, Fragment, Reference, Portal } = HEle;
 
 const appRef = new Reference(),
     clockRef = new Reference();
@@ -91,6 +91,47 @@ class Greeting extends Component {
 }
 logHooks(Greeting);
 
+class Clock extends Component {
+    constructor(props) {
+        super(props);
+        this.states = {
+            date: new Date(),
+            show: true
+        };
+    }
+    render() {
+        return h(
+            Portal,
+            { container: document.getElementById('portal') },
+            this.states.show && h(
+                'p',
+                {
+                    id: 'clock',
+                    title: 'Current time.'
+                },
+                this.states.date.toString()
+            )
+        );
+    }
+    onWillMount() {
+        this.timer = setInterval(() => {
+            this.updateDate();
+        }, 1000);
+    }
+    onDidUnmount() {
+        clearInterval(this.timer);
+    }
+    updateDate() {
+        this.update({ date: new Date() });
+    }
+    show() {
+        this.update({ show: true });
+    }
+    hide() {
+        this.update({ show: false });
+    }
+}
+
 class App extends Component {
     render() {
         return h(
@@ -121,31 +162,6 @@ App.defaultProps = {
     target: 'HEle'
 };
 logHooks(App);
-
-class Clock extends Component {
-    render() {
-        return h(
-            'p',
-            {
-                id: 'clock',
-                title: 'Current time.'
-            },
-            this.states.date.toString()
-        );
-    }
-    onWillMount() {
-        this.states.date = new Date();
-        this.timer = setInterval(() => {
-            this.updateDate();
-        }, 1000);
-    }
-    onDidUnmount() {
-        clearInterval(this.timer);
-    }
-    updateDate() {
-        this.update({ date: new Date() });
-    }
-}
 
 HEle.render(
     h(
