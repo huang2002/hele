@@ -15,7 +15,7 @@ export type UpdateRequestCallback = (oldStates: any) => any;
 export abstract class Component<P extends Props = Props, S = any, SS = any> {
 
     constructor(
-        public readonly props: P
+        public readonly props: Readonly<P>
     ) { }
 
     static defaultProps: RawProps = {};
