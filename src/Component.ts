@@ -27,7 +27,9 @@ export abstract class Component<P extends Props = Props, S = any, SS = any> {
     abstract render(): any;
     toElement() {
         try {
-            this.refs.clear();
+            this.refs.forEach(ref => {
+                ref.current = undefined;
+            });
             return this.render();
         } catch (error) {
             this.onUncaughtError(error);
@@ -50,9 +52,14 @@ export abstract class Component<P extends Props = Props, S = any, SS = any> {
     }
 
     createRef(name: string) {
-        const ref = new Reference();
-        this.refs.set(name, ref);
-        return ref;
+        const { refs } = this;
+        if (refs.has(name)) {
+            return refs.get(name) as Reference;
+        } else {
+            const ref = new Reference();
+            refs.set(name, ref);
+            return ref;
+        }
     }
 
     requestUpdate(callback: UpdateRequestCallback) {

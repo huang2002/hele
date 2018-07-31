@@ -1,3 +1,7 @@
+### 0.2.2 - 2018-07-31
+
+- Improve reference handling
+
 ### 0.2.1 - 2018-07-31
 
 - Improve generic type declarations

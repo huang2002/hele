@@ -1,18 +1,28 @@
 const h = HEle.createElement,
     { Component, Fragment, Reference, Portal } = HEle;
 
-const appRef = new Reference(),
-    clockRef = new Reference();
+const appRef = new Reference();
+let timeRef;
 
+const log = (message, ...args) => { console.log(`%c [ ${message} ]`, 'color: #0f0;', ...args); };
+
+const hookLoggers = {
+    onWillMount() { log('WillMount', this); },
+    onDidMount() { log('DidMount', this); },
+    onWillUpdate() { log('WillUpdate', this); },
+    onDidUpdate() { log('DidUpdate', this); },
+    onWillUnmount() { log('WillUnmount', this); },
+    onDidUnmount() { log('DidUnmount', this); }
+};
 function logHooks(componentConstructor) {
-    Object.assign(componentConstructor.prototype, {
-        onWillMount() { console.log('[ WillMount ]', this); },
-        onDidMount() { console.log('[ DidMount ]', this); },
-        onWillUpdate() { console.log('[ WillUpdate ]', this); },
-        onDidUpdate() { console.log('[ DidUpdate ]', this); },
-        onWillUnmount() { console.log('[ WillUnmount ]', this); },
-        onDidUnmount() { console.log('[ DidUnmount ]', this); }
-    });
+    const { prototype } = componentConstructor;
+    for (const hook in hookLoggers) {
+        const original = prototype[hook];
+        prototype[hook] = function () {
+            original.call(this);
+            hookLoggers[hook].call(this);
+        };
+    }
 }
 
 function GreetingTarget(props) {
@@ -91,47 +101,6 @@ class Greeting extends Component {
 }
 logHooks(Greeting);
 
-class Clock extends Component {
-    constructor(props) {
-        super(props);
-        this.states = {
-            date: new Date(),
-            show: true
-        };
-    }
-    render() {
-        return h(
-            Portal,
-            { container: document.getElementById('portal') },
-            this.states.show && h(
-                'p',
-                {
-                    id: 'clock',
-                    title: 'Current time.'
-                },
-                this.states.date.toString()
-            )
-        );
-    }
-    onWillMount() {
-        this.timer = setInterval(() => {
-            this.updateDate();
-        }, 1000);
-    }
-    onDidUnmount() {
-        clearInterval(this.timer);
-    }
-    updateDate() {
-        this.update({ date: new Date() });
-    }
-    show() {
-        this.update({ show: true });
-    }
-    hide() {
-        this.update({ show: false });
-    }
-}
-
 class App extends Component {
     render() {
         return h(
@@ -143,8 +112,8 @@ class App extends Component {
                 'h1',
                 {
                     title: this.props.title,
-                    onmouseenterCapture(e) { console.log('[ Mouseenter ]', e); },
-                    onmouseoutOnce(e) { console.log('[ Mouseout ]', e); }
+                    onmouseenterCapture(e) { log('Mouseenter', e); },
+                    onmouseoutOnce(e) { log('Mouseout', e); }
                 },
                 'Hello, world!'
             ),
@@ -163,6 +132,49 @@ App.defaultProps = {
 };
 logHooks(App);
 
+class Clock extends Component {
+    constructor(props) {
+        super(props);
+        this.states = {
+            date: new Date(),
+            show: true
+        };
+    }
+    render() {
+        return h(
+            Portal,
+            { container: document.getElementById('portal') },
+            this.states.show && h(
+                'p',
+                {
+                    id: 'clock',
+                    title: 'Current time.',
+                    ref: this.createRef('time')
+                },
+                this.states.date.toString()
+            )
+        );
+    }
+    onWillMount() {
+        timeRef = this.createRef('time');
+        this.timer = setInterval(() => {
+            this.updateDate();
+        }, 1000);
+    }
+    onDidUnmount() {
+        clearInterval(this.timer);
+    }
+    updateDate() {
+        this.update({ date: new Date() });
+    }
+    show() {
+        this.update({ show: true });
+    }
+    hide() {
+        this.update({ show: false });
+    }
+}
+
 HEle.render(
     h(
         Fragment,
@@ -175,10 +187,7 @@ HEle.render(
             }
         ),
         h(
-            Clock,
-            {
-                ref: clockRef
-            }
+            Clock
         )
     ),
     document.getElementById('root')
