@@ -11,7 +11,7 @@ export interface Props extends RawProps {
     children: any[];
 }
 
-export type SpecialPropProcessor<T> = (value: any, node: T) => void;
+export type SpecialPropProcessor<T> = (value: any, target: T) => void;
 export const specialNodePropProcessors = new Map<string, SpecialPropProcessor<Node>>([
     ['children', (children, node) => {
         render(children, node);
@@ -94,14 +94,14 @@ export function applyPropsToNode(props: Props, node: Node) {
     }
 }
 
-export interface ApplyPropsToComponentResult<T extends Props = Props> {
+export interface ApplyPropsToComponentResult<P extends Props = Props> {
     element: any;
-    component: Component<T> | null;
+    component: Component<P> | null;
 }
-export function applyPropsToComponent<T extends Props = Props>(props: Props & T, componentGetter: ComponentGetter<T>) {
+export function applyPropsToComponent<P extends Props = Props>(props: Props & P, componentGetter: ComponentGetter<P>) {
     props = Object.assign({}, props);
 
-    const result: ApplyPropsToComponentResult<T> = { element: null, component: null };
+    const result: ApplyPropsToComponentResult<P> = { element: null, component: null };
 
     if (componentGetter.prototype instanceof Component) {
         const specialProps = new Map<any, SpecialPropProcessor<Component>>();
@@ -112,7 +112,7 @@ export function applyPropsToComponent<T extends Props = Props>(props: Props & T,
                 delete props[key];
             }
         }
-        const component = result.component = new (componentGetter as ComponentConstructor<T>)(props);
+        const component = result.component = new (componentGetter as ComponentConstructor<P>)(props);
         specialProps.forEach((processor, value) => {
             processor(value, component);
         });
@@ -130,7 +130,7 @@ export function applyPropsToComponent<T extends Props = Props>(props: Props & T,
                 delete props[key];
             }
         }
-        const element = (componentGetter as ComponentFactory<T>)(props);
+        const element = (componentGetter as ComponentFactory<P>)(props);
         result.element = element;
     }
 

@@ -12,8 +12,7 @@ export function isEqual(a: any, b: any) {
 
     if (
         (!(a instanceof Object && b instanceof Object)) ||
-        String(a) !== String(b) ||
-        !isEqualValue(Number(a), Number(b))
+        String(a) !== String(b)
     ) {
         return false;
     }

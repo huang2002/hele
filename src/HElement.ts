@@ -2,7 +2,7 @@ import { Props, applyPropsToNode, applyPropsToComponent } from "./props";
 import { ComponentGetter, ComponentConstructor, Component } from "./Component";
 import { parsePossibleElement, flatten } from "./utils";
 
-export const elementMap = new Map<Component<any>, HElement<any>>();
+export const elementMap = new Map<Component, HElement<any>>();
 
 export function convertPossibleElementToNode(
     element: null | HElement | (HElement | null)[]
@@ -16,18 +16,18 @@ export function convertPossibleElementToNode(
     }
 }
 
-export class HElement<T extends Props = Props> {
+export class HElement<P extends Props = Props> {
 
     constructor(
-        public readonly type: string | ComponentGetter<T>,
-        props: Props & T
+        public readonly type: string | ComponentGetter<P>,
+        props: Props & P
     ) {
         this.props = (typeof type !== 'string' && type.prototype instanceof Component) ?
-            Object.assign({}, (type as ComponentConstructor<T>).defaultProps, props) :
+            Object.assign({}, (type as ComponentConstructor<P>).defaultProps, props) :
             props;
     }
 
-    readonly props: Props & T;
+    readonly props: Props & P;
     parent?: Node = undefined;
     node?: Node | Node[] = undefined;
 
@@ -38,7 +38,7 @@ export class HElement<T extends Props = Props> {
             node = document.createElement(type);
             applyPropsToNode(props, node);
         } else {
-            const { element, component } = applyPropsToComponent<T>(props, type),
+            const { element, component } = applyPropsToComponent<P>(props, type),
                 parsedElement = parsePossibleElement(element);
             node = parsedElement instanceof Array ?
                 flatten(parsedElement.map(convertPossibleElementToNode) as Node[]) :

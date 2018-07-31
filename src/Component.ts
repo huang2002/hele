@@ -3,24 +3,24 @@ import { Reference } from "./Reference";
 import { isEqual } from "./utils";
 import { Ticker } from "./Ticker";
 
-export interface ComponentConstructor<T extends Props = Props> {
-    new(props: Props & T): Component<T>;
+export interface ComponentConstructor<P extends Props = Props, S = any, SS = any> {
+    new(props: P): Component<P, S, SS>;
     defaultProps: RawProps;
 }
-export type ComponentFactory<T extends Props = Props> = (props: Props & T) => any;
-export type ComponentGetter<T extends Props = Props> = ComponentConstructor<T> | ComponentFactory<T>;
+export type ComponentFactory<P extends Props = Props> = (props: P) => any;
+export type ComponentGetter<P extends Props = Props, S = any, SS = any> = ComponentConstructor<P, S, SS> | ComponentFactory<P>;
 
 export type UpdateRequestCallback = (oldStates: any) => any;
 
-export abstract class Component<T extends Props = Props> {
+export abstract class Component<P extends Props = Props, S = any, SS = any> {
 
     constructor(
-        public readonly props: Props & T
+        public readonly props: P
     ) { }
 
     static defaultProps: RawProps = {};
 
-    states: any = {};
+    states: S = {} as S;
     refs = new Map<string, Reference>();
     updateRequestCallbacks = new Array<UpdateRequestCallback>();
 
@@ -37,11 +37,12 @@ export abstract class Component<T extends Props = Props> {
 
     onWillMount() { }
     onDidMount() { }
-    shouldUpdate(oldStates: any, newStates: any) {
+    shouldUpdate(oldStates: S, newStates: S) {
         return !isEqual(oldStates, newStates);
     }
-    onWillUpdate(): any { }
-    onDidUpdate(snapShot: any) { }
+    // @ts-ignore
+    onWillUpdate(): SS { }
+    onDidUpdate(snapShot: SS) { }
     onWillUnmount() { }
     onDidUnmount() { }
     onUncaughtError(error: Error) {
@@ -59,7 +60,7 @@ export abstract class Component<T extends Props = Props> {
         Ticker.updateComponent(this);
         return this;
     }
-    update(newStates: any) {
+    update(newStates: S) {
         return this.requestUpdate(() => newStates);
     }
 

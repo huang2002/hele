@@ -1,9 +1,9 @@
-import { RawProps } from "./props";
+import { RawProps, Props } from "./props";
 import { ComponentGetter, ComponentFactory } from "./Component";
 import { createElement } from "./createElement";
 
-export function createFactory(type: string | ComponentGetter) {
-    return function (props?: RawProps, ...children: any[]) {
+export function createFactory<P extends Props = Props>(type: string | ComponentGetter<P>) {
+    return function (props?: RawProps & P, ...children: any[]) {
         return createElement(type, props, ...children);
-    } as ComponentFactory;
+    } as ComponentFactory<P>;
 }

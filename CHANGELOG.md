@@ -1,3 +1,7 @@
+### 0.2.1 - 2018-07-31
+
+- Improve generic type declarations
+
 ## 0.2.0 - 2018-07-30
 
 - Add Portal
