@@ -1,8 +1,8 @@
-import { Props, applyPropsToNode, applyPropsToComponent } from "./props";
+import { AnyProps, Props, applyPropsToNode, applyPropsToComponent } from "./props";
 import { ComponentGetter, ComponentConstructor, Component } from "./Component";
 import { parsePossibleElement, flatten } from "./utils";
 
-export const elementMap = new Map<Component, HElement<any>>();
+export const elementMap = new Map<Component<any>, HElement<any>>();
 
 export function convertPossibleElementToNode(
     element: null | HElement | (HElement | null)[]
@@ -16,7 +16,7 @@ export function convertPossibleElementToNode(
     }
 }
 
-export class HElement<P extends Props = Props> {
+export class HElement<P extends AnyProps = AnyProps> {
 
     constructor(
         public readonly type: string | ComponentGetter<P>,

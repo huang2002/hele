@@ -1,3 +1,8 @@
+### 0.2.4 - 2018-08-01
+
+- Improve type declarations
+- Fix a bug in Ticker
+
 ### 0.2.3 - 2018-07-31
 
 - Improve type declarations

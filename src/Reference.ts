@@ -1,5 +1,5 @@
 import { Component } from "./Component";
 
 export class Reference {
-    current?: Node | Component = undefined;
+    current?: Node | Component<any> = undefined;
 }

@@ -2,7 +2,7 @@ import { Component } from "./Component";
 import { elementMap, HElement } from "./HElement";
 import { clearChildNodes, flatten } from "./utils";
 
-export const expiredComponents = new Set<Component>();
+export const expiredComponents = new Set<Component<any>>();
 
 export type TickMethod = (callback: () => void) => void;
 
@@ -10,7 +10,7 @@ export const defaultTickMethod: TickMethod = callback => {
     requestAnimationFrame(callback);
 };
 
-export function updateComponent(component: Component) {
+export function updateComponent(component: Component<any>) {
     const oldElement = elementMap.get(component);
     if (oldElement) {
         const { node } = oldElement;
@@ -83,20 +83,19 @@ export const Ticker = {
                     elementMap.forEach((element, component) => {
                         const { node } = element;
                         if (node) {
-                            const nodes = flatten<Node>([node]);
-                            if (nodes.some(n => !n.parentNode)) {
-                                nodes.forEach(n => {
+                            flatten<Node>([node]).forEach(n => {
+                                if (!n.parentNode) {
                                     clearChildNodes(n);
-                                });
-                                hasElementDeleted = true;
-                                try {
-                                    component.onWillUnmount();
-                                    elementMap.delete(component);
-                                    component.onDidUnmount();
-                                } catch (error) {
-                                    component.onUncaughtError(error);
+                                    hasElementDeleted = true;
+                                    try {
+                                        component.onWillUnmount();
+                                        elementMap.delete(component);
+                                        component.onDidUnmount();
+                                    } catch (error) {
+                                        component.onUncaughtError(error);
+                                    }
                                 }
-                            }
+                            });
                         }
                     });
                 }
@@ -106,7 +105,7 @@ export const Ticker = {
         }
     },
 
-    updateComponent(component: Component) {
+    updateComponent(component: Component<any>) {
         expiredComponents.add(component);
         Ticker.tick();
     }

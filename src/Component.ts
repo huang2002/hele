@@ -1,25 +1,28 @@
-import { Props, RawProps } from "./props";
+import { Props, AnyProps } from "./props";
 import { Reference } from "./Reference";
 import { isEqual } from "./utils";
 import { Ticker } from "./Ticker";
 
-export interface ComponentConstructor<P extends Props = Props, S = any, SS = any> {
+export interface ComponentConstructor<P extends AnyProps = AnyProps, S = any, SS = any> {
     new(props: P): Component<P, S, SS>;
-    defaultProps: RawProps;
+    defaultProps: AnyProps;
 }
-export type ComponentFactory<P extends Props = Props> = (props: P) => any;
-export type ComponentGetter<P extends Props = Props, S = any, SS = any> = ComponentConstructor<P, S, SS> | ComponentFactory<P>;
+export type ComponentFactory<P extends AnyProps = AnyProps> = (props: P) => any;
+export type ComponentGetter<P extends AnyProps = AnyProps, S = any, SS = any> = ComponentConstructor<P, S, SS> | ComponentFactory<P>;
 
 export type UpdateRequestCallback = (oldStates: any) => any;
 
-export abstract class Component<P extends Props = Props, S = any, SS = any> {
+export abstract class Component<P extends AnyProps = AnyProps, S = any, SS = any> {
 
     constructor(
-        public readonly props: Readonly<P>
-    ) { }
+        props: P
+    ) {
+        this.props = props as P & Props;
+    }
 
-    static defaultProps: RawProps = {};
+    static defaultProps: AnyProps = {};
 
+    props: Readonly<P & Props>;
     states: S = {} as S;
     refs = new Map<string, Reference>();
     updateRequestCallbacks = new Array<UpdateRequestCallback>();
@@ -67,7 +70,7 @@ export abstract class Component<P extends Props = Props, S = any, SS = any> {
         Ticker.updateComponent(this);
         return this;
     }
-    update(newStates: S) {
+    update(newStates: Partial<S>) {
         return this.requestUpdate(() => newStates);
     }
 

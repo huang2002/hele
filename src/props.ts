@@ -2,12 +2,15 @@ import { Component, ComponentGetter, ComponentFactory, ComponentConstructor } fr
 import { Reference } from "./Reference";
 import { render } from "./render";
 
-export interface RawProps {
+export interface AnyProps {
     [key: string]: any;
+}
+
+export interface RawProps extends AnyProps {
     ref?: Reference;
 }
 
-export interface Props extends RawProps {
+export interface Props extends AnyProps {
     children: any[];
 }
 
@@ -34,7 +37,7 @@ export const specialNodePropProcessors = new Map<string, SpecialPropProcessor<No
         ref.current = node;
     }]
 ]);
-export const specialComponentPropProcessors = new Map<string, SpecialPropProcessor<Component>>([
+export const specialComponentPropProcessors = new Map<string, SpecialPropProcessor<Component<any>>>([
     ['ref', (ref: Reference, component) => {
         ref.current = component;
     }]
@@ -94,17 +97,17 @@ export function applyPropsToNode(props: Props, node: Node) {
     }
 }
 
-export interface ApplyPropsToComponentResult<P extends Props = Props> {
+export interface ApplyPropsToComponentResult<P extends AnyProps = AnyProps> {
     element: any;
     component: Component<P> | null;
 }
-export function applyPropsToComponent<P extends Props = Props>(props: Props & P, componentGetter: ComponentGetter<P>) {
+export function applyPropsToComponent<P extends AnyProps = AnyProps>(props: Props & P, componentGetter: ComponentGetter<P>) {
     props = Object.assign({}, props);
 
     const result: ApplyPropsToComponentResult<P> = { element: null, component: null };
 
     if (componentGetter.prototype instanceof Component) {
-        const specialProps = new Map<any, SpecialPropProcessor<Component>>();
+        const specialProps = new Map<any, SpecialPropProcessor<Component<any>>>();
         for (const key in props) {
             const processor = specialComponentPropProcessors.get(key);
             if (processor) {

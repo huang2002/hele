@@ -1,13 +1,15 @@
 {
     "name": "hele",
-    "version": "0.2.3",
+    "version": "0.2.4",
     "description": "A front-end UI lib.",
     "main": "dist/hele.umd.min.js",
     "module": "dist/hele.min.js",
+    "types": "./index.d.ts",
     "scripts": {
         "prebuild": "rd /s /q raw dist typings || exit 0",
         "build": "tsc && rollup -c",
-        "postbuild": "terser dist/hele.js --config-file terser.json --module -o dist/hele.min.js && terser dist/hele.umd.js --config-file terser.json -o dist/hele.umd.min.js"
+        "postbuild": "terser dist/hele.js --config-file terser.json --module -o dist/hele.min.js && terser dist/hele.umd.js --config-file terser.json -o dist/hele.umd.min.js",
+        "build:test": "cd test && tsc"
     },
     "repository": {
         "type": "git",
@@ -37,9 +39,9 @@
         "babel-plugin-external-helpers": "^6.22.0",
         "babel-plugin-transform-object-rest-spread": "^6.26.0",
         "babel-preset-env": "^1.7.0",
-        "rollup": "^0.63.4",
+        "rollup": "^0.63.5",
         "rollup-plugin-babel": "^3.0.7",
         "terser": "^3.8.1",
-        "typescript": "^2.9.2"
+        "typescript": "^3.0.1"
     }
 }
