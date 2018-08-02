@@ -1,17 +1,22 @@
 "use strict";
 /// <reference types="../" />
-const { render, Component, Fragment } = HEle;
-const hooks = [
+const { render, Component, Fragment, Portal, Reference } = HEle;
+const commonHooks = [
     'onWillMount', 'onDidMount',
-    'onWillUpdate', 'onDidUpdate',
     'onWillUnmount', 'onDidUnmount'
+], optionalHooks = [
+    'onWillUpdate', 'onDidUpdate'
 ];
-let count = 0;
-function logHooks(constructor) {
-    const id = count++;
-    hooks.forEach(hook => {
+function logHooks(constructor, optional = true) {
+    const components = new Array();
+    [...commonHooks, ...(optional ? optionalHooks : [])].forEach(hook => {
         const { prototype } = constructor, original = prototype[hook];
         prototype[hook] = function (...args) {
+            let id = components.indexOf(this);
+            if (id === -1) {
+                id = components.length;
+                components.push(this);
+            }
             console.log(`[ ${hook} ] ${constructor.name} ${id}`);
             return original.call(this, ...args);
         };
@@ -72,6 +77,7 @@ class Clock extends Component {
     }
 }
 Clock.defaultProps = { color: 'lightgreen' };
+logHooks(Clock, false);
 class App extends Component {
     render() {
         return (HEle.createElement(Fragment, null,
@@ -80,6 +86,11 @@ class App extends Component {
     }
 }
 logHooks(App);
+const appRef = new Reference();
 render((HEle.createElement(Fragment, null,
     HEle.createElement(Clock, { color: "green" }),
-    HEle.createElement(App, null))), document.getElementById('root'));
+    HEle.createElement(App, { ref: appRef }),
+    HEle.createElement(Portal, { container: document.getElementById('portal') },
+        HEle.createElement(Clock, { color: "lightblue" })),
+    HEle.createElement(Portal, null,
+        HEle.createElement(Clock, { color: "purple" })))), document.getElementById('root'));

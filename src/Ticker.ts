@@ -1,6 +1,6 @@
 import { Component } from "./Component";
 import { elementMap, HElement } from "./HElement";
-import { clearChildNodes, flatten } from "./utils";
+import { flatten } from "./utils";
 
 export const expiredComponents = new Set<Component<any>>();
 
@@ -15,17 +15,34 @@ export function updateComponent(component: Component<any>) {
     if (oldElement) {
         const { node } = oldElement;
         if (node) {
-            flatten<Node>([node]).forEach((n, i) => {
-                clearChildNodes(n);
+            const { parent } = oldElement,
+                nodes = flatten<Node>([node]);
+            nodes.forEach((n, i) => {
                 const { parentNode } = n;
                 if (parentNode) {
                     if (i === 0) {
                         const newElement = component.toElement();
                         if (newElement instanceof HElement) {
+                            newElement.parent = parent;
                             elementMap.set(component, newElement);
                             const newNode = newElement.toNode(),
+                                newNodes = flatten<Node>([newNode]),
                                 fragment = document.createDocumentFragment();
-                            flatten<Node>([newNode]).forEach(child => {
+                            if (parent) {
+                                if (parent.node instanceof Array) {
+                                    nodes.forEach((n, i) => {
+                                        const index = (parent.node as Node[]).indexOf(n);
+                                        if (i === 0) {
+                                            (parent.node as Node[]).splice(index, 1, ...newNodes);
+                                        } else {
+                                            (parent.node as Node[]).splice(index, 1);
+                                        }
+                                    });
+                                } else {
+                                    parent.node = newNode;
+                                }
+                            }
+                            newNodes.forEach(child => {
                                 fragment.appendChild(child);
                             });
                             parentNode.replaceChild(fragment, n);
@@ -83,19 +100,16 @@ export const Ticker = {
                     elementMap.forEach((element, component) => {
                         const { node } = element;
                         if (node) {
-                            flatten<Node>([node]).forEach(n => {
-                                if (!n.parentNode) {
-                                    clearChildNodes(n);
-                                    hasElementDeleted = true;
-                                    try {
-                                        component.onWillUnmount();
-                                        elementMap.delete(component);
-                                        component.onDidUnmount();
-                                    } catch (error) {
-                                        component.onUncaughtError(error);
-                                    }
+                            if (!(node instanceof Array ? node[0] : node).parentNode) {
+                                hasElementDeleted = true;
+                                try {
+                                    component.onWillUnmount();
+                                    elementMap.delete(component);
+                                    component.onDidUnmount();
+                                } catch (error) {
+                                    component.onUncaughtError(error);
                                 }
-                            });
+                            }
                         }
                     });
                 }

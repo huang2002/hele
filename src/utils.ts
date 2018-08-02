@@ -33,8 +33,11 @@ export function isEqual(a: any, b: any) {
 
 }
 
-export function clearChildNodes(node: Node) {
+export function clearChildNodes(node: Node, deep = false) {
     [...node.childNodes].forEach(childNode => {
+        if (deep) {
+            clearChildNodes(childNode, true);
+        }
         node.removeChild(childNode);
     });
 }

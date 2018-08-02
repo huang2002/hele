@@ -28,7 +28,7 @@ export class HElement<P extends AnyProps = AnyProps> {
     }
 
     readonly props: Props & P;
-    parent?: Node = undefined;
+    parent?: HElement<any> = undefined;
     node?: Node | Node[] = undefined;
 
     toNode(): Node | Node[] {
@@ -41,8 +41,15 @@ export class HElement<P extends AnyProps = AnyProps> {
             const { element, component } = applyPropsToComponent<P>(props, type),
                 parsedElement = parsePossibleElement(element);
             node = parsedElement instanceof Array ?
-                flatten(parsedElement.map(convertPossibleElementToNode) as Node[]) :
+                flatten<Node>(parsedElement.map(convertPossibleElementToNode)) :
                 convertPossibleElementToNode(parsedElement);
+            if (parsedElement) {
+                flatten<HElement | null>([parsedElement]).forEach(ele => {
+                    if (ele) {
+                        ele.parent = this;
+                    }
+                });
+            }
             if (component) {
                 elementMap.set(component, this);
                 try {

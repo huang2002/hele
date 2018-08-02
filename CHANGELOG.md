@@ -1,3 +1,9 @@
+### 0.3.0 - 2018-08-02
+
+- Add deep clear
+- Improve type declarations
+- Fix a bug in emitting lifecycle hooks
+
 ### 0.2.4 - 2018-08-01
 
 - Improve type declarations

@@ -1,19 +1,24 @@
 /// <reference types="../" />
 
-const { render, Component, Fragment } = HEle;
+const { render, Component, Fragment, Portal, Reference } = HEle;
 
-const hooks = [
+const commonHooks = [
     'onWillMount', 'onDidMount',
-    'onWillUpdate', 'onDidUpdate',
     'onWillUnmount', 'onDidUnmount'
+], optionalHooks = [
+    'onWillUpdate', 'onDidUpdate'
 ];
-let count = 0;
-function logHooks(constructor: HEle.ComponentConstructor<any>) {
-    const id = count++;
-    hooks.forEach(hook => {
+function logHooks(constructor: HEle.ComponentConstructor<any>, optional = true) {
+    const components = new Array<HEle.Component>();
+    [...commonHooks, ...(optional ? optionalHooks : [])].forEach(hook => {
         const { prototype } = constructor,
             original = prototype[hook];
         prototype[hook] = function (...args: any[]) {
+            let id = components.indexOf(this);
+            if (id === -1) {
+                id = components.length;
+                components.push(this);
+            }
             console.log(`[ ${hook} ] ${constructor.name} ${id}`);
             return original.call(this, ...args);
         };
@@ -98,8 +103,9 @@ class Clock extends Component<ClockProps, ClockStates> {
         clearInterval(this.timer);
     }
 }
+logHooks(Clock, false);
 
-class App extends Component<{}> {
+class App extends Component<HEle.RawProps> {
     render() {
         return (
             <Fragment>
@@ -111,11 +117,18 @@ class App extends Component<{}> {
 }
 logHooks(App);
 
+const appRef = new Reference();
 render(
     (
         <Fragment>
             <Clock color="green" />
-            <App />
+            <App ref={appRef} />
+            <Portal container={document.getElementById('portal') as HTMLElement}>
+                <Clock color="lightblue" />
+            </Portal>
+            <Portal>
+                <Clock color="purple" />
+            </Portal>
         </Fragment>
     ),
     document.getElementById('root') as HTMLElement
