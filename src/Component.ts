@@ -10,7 +10,7 @@ export interface ComponentConstructor<P extends AnyProps = AnyProps, S = any, SS
 export type ComponentFactory<P extends AnyProps = AnyProps> = (props: P) => any;
 export type ComponentGetter<P extends AnyProps = AnyProps, S = any, SS = any> = ComponentConstructor<P, S, SS> | ComponentFactory<P>;
 
-export type UpdateRequestCallback = (oldStates: any) => any;
+export type UpdateRequestCallback<S> = (oldStates: S) => Partial<S>;
 
 export abstract class Component<P extends AnyProps = AnyProps, S = any, SS = any> {
 
@@ -25,7 +25,7 @@ export abstract class Component<P extends AnyProps = AnyProps, S = any, SS = any
     props: Readonly<P & Props>;
     states: S = {} as S;
     refs = new Map<string, Reference>();
-    updateRequestCallbacks = new Array<UpdateRequestCallback>();
+    updateRequestCallbacks = new Array<UpdateRequestCallback<S>>();
 
     abstract render(): any;
     toElement() {
@@ -65,7 +65,7 @@ export abstract class Component<P extends AnyProps = AnyProps, S = any, SS = any
         }
     }
 
-    requestUpdate(callback: UpdateRequestCallback) {
+    requestUpdate(callback: UpdateRequestCallback<S>) {
         this.updateRequestCallbacks.push(callback);
         Ticker.updateComponent(this);
         return this;
