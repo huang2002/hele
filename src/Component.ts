@@ -51,7 +51,7 @@ export abstract class Component<P extends AnyProps = AnyProps, S = any, SS = any
     onWillUnmount() { }
     onDidUnmount() { }
     onUncaughtError(error: Error) {
-        console.error('UncaughtError(component,error): ', this, error);
+        console.error('UncaughtError:', error);
     }
 
     createRef(name: string) {

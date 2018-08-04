@@ -1,3 +1,9 @@
+### 0.3.2 - 2018-08-04
+
+- Preserve special props
+- Improve type declarations
+- Modify the default message in onUncaughtError
+
 ### 0.3.1 - 2018-08-02
 
 - Improve type declarations

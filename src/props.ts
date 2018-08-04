@@ -10,7 +10,7 @@ export interface RawProps extends AnyProps {
     ref?: Reference;
 }
 
-export interface Props extends AnyProps {
+export interface Props extends RawProps {
     children: any[];
 }
 
@@ -102,23 +102,17 @@ export interface ApplyPropsToComponentResult<P extends AnyProps = AnyProps> {
     component: Component<P> | null;
 }
 export function applyPropsToComponent<P extends AnyProps = AnyProps>(props: Props & P, componentGetter: ComponentGetter<P>) {
-    props = Object.assign({}, props);
 
     const result: ApplyPropsToComponentResult<P> = { element: null, component: null };
 
     if (componentGetter.prototype instanceof Component) {
-        const specialProps = new Map<any, SpecialPropProcessor<Component<any>>>();
+        const component = result.component = new (componentGetter as ComponentConstructor<P>)(props);
         for (const key in props) {
             const processor = specialComponentPropProcessors.get(key);
             if (processor) {
-                specialProps.set(props[key], processor);
-                delete props[key];
+                processor(props[key], component);
             }
         }
-        const component = result.component = new (componentGetter as ComponentConstructor<P>)(props);
-        specialProps.forEach((processor, value) => {
-            processor(value, component);
-        });
         try {
             component.onWillMount();
         } catch (error) {
@@ -130,7 +124,6 @@ export function applyPropsToComponent<P extends AnyProps = AnyProps>(props: Prop
             const processor = specialFactoryPropProcessors.get(key);
             if (processor) {
                 processor(props[key], undefined);
-                delete props[key];
             }
         }
         const element = (componentGetter as ComponentFactory<P>)(props);

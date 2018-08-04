@@ -8,10 +8,11 @@ export = HEle;
 declare global {
     namespace JSX {
         interface IntrinsicElements {
-            [name: string]: any;
+            [name: string]: HEle.RawProps;
+            ref?: HEle.Reference;
         }
         interface ElementChildrenAttribute {
-            children: {};
+            children: any;
         }
     }
 }
