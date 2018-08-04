@@ -1,3 +1,7 @@
+### 0.3.3 - 2018-08-04
+
+- Fix a typo in the declaration file
+
 ### 0.3.2 - 2018-08-04
 
 - Preserve special props

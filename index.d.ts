@@ -9,7 +9,6 @@ declare global {
     namespace JSX {
         interface IntrinsicElements {
             [name: string]: HEle.RawProps;
-            ref?: HEle.Reference;
         }
         interface ElementChildrenAttribute {
             children: any;
