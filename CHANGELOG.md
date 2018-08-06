@@ -1,3 +1,7 @@
+### 0.4.1 - 2018-08-06
+
+- Update file structures
+
 ### 0.4.0 - 2018-08-06
 
 - Add class name array handling

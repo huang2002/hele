@@ -1,5 +1,6 @@
 export * from "./props";
 export * from "./utils";
+export * from "./updateComponent";
 export * from "./Ticker";
 export * from "./Component";
 export * from "./Fragment";
