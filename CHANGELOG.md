@@ -1,3 +1,8 @@
+### 0.4.0 - 2018-08-06
+
+- Add class name array handling
+- Update type declarations
+
 ### 0.3.3 - 2018-08-04
 
 - Fix a typo in the declaration file

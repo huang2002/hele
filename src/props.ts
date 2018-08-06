@@ -17,7 +17,7 @@ export interface Props extends RawProps {
 export type SpecialPropProcessor<T> = (value: any, target: T) => void;
 export const specialNodePropProcessors = new Map<string, SpecialPropProcessor<Node>>([
     ['children', (children, node) => {
-        render(children, node);
+        render(children, node, false);
     }],
     ['style', (style, node) => {
         if (!(node instanceof HTMLElement)) {
@@ -35,6 +35,16 @@ export const specialNodePropProcessors = new Map<string, SpecialPropProcessor<No
     }],
     ['ref', (ref: Reference, node) => {
         ref.current = node;
+    }],
+    ['class', (classNames: string | any[], node) => {
+        if ('setAttribute' in node) {
+            // @ts-ignore
+            node.setAttribute(
+                typeof classNames === 'string' ?
+                    classNames :
+                    classNames.filter(name => typeof name === 'string').join(' ')
+            );
+        }
     }]
 ]);
 export const specialComponentPropProcessors = new Map<string, SpecialPropProcessor<Component<any>>>([
