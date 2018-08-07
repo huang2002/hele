@@ -1,3 +1,9 @@
+## 0.5.0 - 2018-08-07
+
+- Remove Ticker.maxCheckCountPerTick
+- Add Ticker.maxClearCountPerTick
+- Add Ticker.maxUpdateCountPerTick
+
 ### 0.4.2 - 2018-08-07
 
 - Remove AnyProps
@@ -5,7 +11,7 @@
 
 ### 0.4.1 - 2018-08-06
 
-- Update file structures
+- Update the file structure
 
 ### 0.4.0 - 2018-08-06
 

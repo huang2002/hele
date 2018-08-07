@@ -14,7 +14,8 @@ export const Ticker = {
 
     tickMethod: defaultTickMethod,
 
-    maxCheckCountPerTick: 100,
+    maxClearCountPerTick: 100,
+    maxUpdateCountPerTick: 100,
 
     willTick: false,
 
@@ -23,30 +24,33 @@ export const Ticker = {
             Ticker.tickMethod(() => {
                 Ticker.willTick = false;
 
+                let updateCount = 0;
                 expiredComponents.forEach(component => {
-                    const { states, updateRequestCallbacks } = component,
-                        newStates = { ...states };
-                    updateRequestCallbacks.forEach(callback => {
-                        Object.assign(newStates, callback(newStates));
-                    });
-                    updateRequestCallbacks.length = 0;
-                    try {
-                        if (component.shouldUpdate(states, newStates)) {
-                            const snapshot = component.onWillUpdate();
-                            Object.assign(states, newStates);
-                            component.onDidUpdate(snapshot);
-                            updateComponent(component);
+                    if (updateCount++ < Ticker.maxUpdateCountPerTick) {
+                        const { states, updateRequestCallbacks } = component,
+                            newStates = { ...states };
+                        updateRequestCallbacks.forEach(callback => {
+                            Object.assign(newStates, callback(newStates));
+                        });
+                        updateRequestCallbacks.length = 0;
+                        try {
+                            if (component.shouldUpdate(states, newStates)) {
+                                const snapshot = component.onWillUpdate();
+                                Object.assign(states, newStates);
+                                component.onDidUpdate(snapshot);
+                                updateComponent(component);
+                            }
+                        } catch (error) {
+                            component.onUncaughtError(error);
                         }
-                    } catch (error) {
-                        component.onUncaughtError(error);
                     }
+                    expiredComponents.delete(component);
                 });
-                expiredComponents.clear();
 
-                const { maxCheckCountPerTick } = Ticker;
+                const { maxClearCountPerTick } = Ticker;
                 let hasElementDeleted = true,
                     checkCount = 0;
-                while (hasElementDeleted && checkCount++ < maxCheckCountPerTick) {
+                while (hasElementDeleted && checkCount++ < maxClearCountPerTick) {
                     hasElementDeleted = false;
                     elementMap.forEach((element, component) => {
                         const { node } = element;
