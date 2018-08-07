@@ -1,9 +1,7 @@
 
-import * as HEle from "./typings/index";
-
 export as namespace HEle;
 
-export = HEle;
+export * from "./typings/index";
 
 declare global {
     namespace JSX {

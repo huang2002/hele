@@ -1,4 +1,4 @@
-import { AnyProps, Props, applyPropsToNode, applyPropsToComponent } from "./props";
+import { RawProps, Props, applyPropsToNode, applyPropsToComponent } from "./props";
 import { ComponentGetter, ComponentConstructor, Component } from "./Component";
 import { parsePossibleElement, flatten } from "./utils";
 
@@ -16,7 +16,7 @@ export function convertPossibleElementToNode(
     }
 }
 
-export class HElement<P extends AnyProps = AnyProps> {
+export class HElement<P extends RawProps = RawProps> {
 
     constructor(
         public readonly type: string | ComponentGetter<P>,

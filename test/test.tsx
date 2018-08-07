@@ -32,7 +32,7 @@ const GreetingTarget: HEle.ComponentFactory<GreetingTargetProps> = props => {
     return <span style="color: blue;">{props.children}</span>;
 };
 
-interface GreetingProps extends HEle.AnyProps {
+interface GreetingProps {
     defaultTarget?: string;
 }
 interface GreetingStates {
@@ -94,7 +94,7 @@ class Clock extends Component<ClockProps, ClockStates> {
     }
     render() {
         return (
-            <p style={{ color: this.props.color, fontWeight: 'bold' }}>
+            <p style={{ color: this.props.color as string, fontWeight: 'bold' }}>
                 {this.states.date.toLocaleString()}
             </p>
         );

@@ -2,11 +2,8 @@ import { Component, ComponentGetter, ComponentFactory, ComponentConstructor } fr
 import { Reference } from "./Reference";
 import { render } from "./render";
 
-export interface AnyProps {
+export interface RawProps {
     [key: string]: any;
-}
-
-export interface RawProps extends AnyProps {
     ref?: Reference;
 }
 
@@ -107,11 +104,11 @@ export function applyPropsToNode(props: Props, node: Node) {
     }
 }
 
-export interface ApplyPropsToComponentResult<P extends AnyProps = AnyProps> {
+export interface ApplyPropsToComponentResult<P extends RawProps = RawProps> {
     element: any;
     component: Component<P> | null;
 }
-export function applyPropsToComponent<P extends AnyProps = AnyProps>(props: Props & P, componentGetter: ComponentGetter<P>) {
+export function applyPropsToComponent<P extends RawProps = RawProps>(props: Props & P, componentGetter: ComponentGetter<P>) {
 
     const result: ApplyPropsToComponentResult<P> = { element: null, component: null };
 

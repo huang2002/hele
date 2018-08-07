@@ -1,18 +1,18 @@
-import { Props, AnyProps } from "./props";
+import { Props, RawProps } from "./props";
 import { Reference } from "./Reference";
 import { isEqual } from "./utils";
 import { Ticker } from "./Ticker";
 
-export interface ComponentConstructor<P extends AnyProps = AnyProps, S = any, SS = any> {
+export interface ComponentConstructor<P extends RawProps = RawProps, S = any, SS = any> {
     new(props: P): Component<P, S, SS>;
-    defaultProps: AnyProps;
+    defaultProps: RawProps;
 }
-export type ComponentFactory<P extends AnyProps = AnyProps> = (props: P) => any;
-export type ComponentGetter<P extends AnyProps = AnyProps, S = any, SS = any> = ComponentConstructor<P, S, SS> | ComponentFactory<P>;
+export type ComponentFactory<P extends RawProps = RawProps> = (props: P) => any;
+export type ComponentGetter<P extends RawProps = RawProps, S = any, SS = any> = ComponentConstructor<P, S, SS> | ComponentFactory<P>;
 
 export type UpdateRequestCallback<S> = (oldStates: S) => Partial<S>;
 
-export abstract class Component<P extends AnyProps = AnyProps, S = any, SS = any> {
+export abstract class Component<P extends RawProps = RawProps, S = any, SS = any> {
 
     constructor(
         props: P
@@ -20,7 +20,7 @@ export abstract class Component<P extends AnyProps = AnyProps, S = any, SS = any
         this.props = props as P & Props;
     }
 
-    static defaultProps: AnyProps = {};
+    static defaultProps: RawProps = {};
 
     props: Readonly<P & Props>;
     states: S = {} as S;
