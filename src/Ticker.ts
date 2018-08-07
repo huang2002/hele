@@ -49,8 +49,8 @@ export const Ticker = {
 
                 const { maxClearCountPerTick } = Ticker;
                 let hasElementDeleted = true,
-                    checkCount = 0;
-                while (hasElementDeleted && checkCount++ < maxClearCountPerTick) {
+                    clearCount = 0;
+                while (hasElementDeleted && clearCount++ < maxClearCountPerTick) {
                     hasElementDeleted = false;
                     elementMap.forEach((element, component) => {
                         const { node } = element;

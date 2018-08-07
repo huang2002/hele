@@ -1,5 +1,5 @@
 import { Component } from "./Component";
 
-export class Reference {
-    current?: Node | Component<any> = undefined;
+export class Reference<C extends Component = Component> {
+    current?: Node | C = undefined;
 }

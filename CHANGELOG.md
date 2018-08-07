@@ -1,3 +1,7 @@
+### 0.5.1 - 2018-08-07
+
+- Improve type declarations
+
 ## 0.5.0 - 2018-08-07
 
 - Remove Ticker.maxCheckCountPerTick

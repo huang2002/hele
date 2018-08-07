@@ -29,10 +29,10 @@ export abstract class Component<P extends RawProps = RawProps, S = any, SS = any
 
     abstract render(): any;
     toElement() {
+        this.refs.forEach(ref => {
+            ref.current = undefined;
+        });
         try {
-            this.refs.forEach(ref => {
-                ref.current = undefined;
-            });
             return this.render();
         } catch (error) {
             this.onUncaughtError(error);
@@ -59,7 +59,7 @@ export abstract class Component<P extends RawProps = RawProps, S = any, SS = any
         if (refs.has(name)) {
             return refs.get(name) as Reference;
         } else {
-            const ref = new Reference();
+            const ref = new Reference<any>();
             refs.set(name, ref);
             return ref;
         }
