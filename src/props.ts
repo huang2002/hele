@@ -8,7 +8,7 @@ export interface RawProps {
 }
 
 export interface Props extends RawProps {
-    children: any[];
+    children: any;
 }
 
 export type SpecialPropProcessor<T> = (value: any, target: T) => void;
