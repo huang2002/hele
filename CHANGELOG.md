@@ -1,3 +1,8 @@
+## 0.7.0 - 2018-08-08
+
+- Add newStates parameter to component.onWillUpdate
+- Improve update request callback handling
+
 ## 0.6.0 - 2018-08-08
 
 - Improve minification

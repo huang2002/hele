@@ -46,7 +46,7 @@ export abstract class Component<P extends RawProps = RawProps, S = any, SS = any
         return !isEqual(oldStates, newStates);
     }
     // @ts-ignore
-    onWillUpdate(): SS { }
+    onWillUpdate(newStates: S): SS { }
     onDidUpdate(snapShot: SS) { }
     onWillUnmount() { }
     onDidUnmount() { }
