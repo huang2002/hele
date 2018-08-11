@@ -90,7 +90,7 @@ class Clock extends Component<ClockProps, ClockState> {
         this.updateTime();
         this.timer = setInterval(() => {
             this.updateTime();
-        }, 1000);
+        }, 500);
     }
     render() {
         return (

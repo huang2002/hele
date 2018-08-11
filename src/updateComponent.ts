@@ -1,6 +1,7 @@
 import { Component } from "./Component";
 import { elementMap, HElement } from "./HElement";
 import { flatten } from "./utils";
+import { clearChildNodes } from "./utils";
 
 export function updateComponent(component: Component<any>) {
     const oldElement = elementMap.get(component);
@@ -11,6 +12,7 @@ export function updateComponent(component: Component<any>) {
                 nodes = flatten<Node>([node]);
             nodes.forEach((n, i) => {
                 const { parentNode } = n;
+                clearChildNodes(n, true);
                 if (parentNode) {
                     if (i === 0) {
                         const newElement = component.toElement();

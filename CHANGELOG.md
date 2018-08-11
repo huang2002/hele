@@ -1,3 +1,7 @@
+### 0.8.1 - 2018-08-11
+
+- Fix two bugs in updating
+
 ## 0.8.0 - 2018-08-11
 
 - Rename states state

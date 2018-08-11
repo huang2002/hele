@@ -67,7 +67,7 @@ class Clock extends Component {
         this.updateTime();
         this.timer = setInterval(() => {
             this.updateTime();
-        }, 1000);
+        }, 500);
     }
     render() {
         return (HEle.createElement("p", { style: { color: this.props.color, fontWeight: 'bold' } }, this.state.date.toLocaleString()));
