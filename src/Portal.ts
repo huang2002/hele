@@ -1,15 +1,17 @@
-import { Component } from "./Component";
+import { Component, Context } from "./Component";
+import { createElement } from "./createElement";
 import { Props } from "./props";
 import { render } from "./render";
 
 export interface PortalProps extends Props {
     container?: Node;
+    deepClear?: boolean;
 }
 
 export class Portal extends Component<PortalProps> {
 
-    constructor(props: PortalProps) {
-        super(props);
+    constructor(props: PortalProps, context: any) {
+        super(props, context);
 
         if (props.container) {
             this.container = props.container;
@@ -27,7 +29,15 @@ export class Portal extends Component<PortalProps> {
     }
 
     onWillMount() {
-        render(this.props.children, this.container);
+        render(
+            createElement(
+                Context,
+                { value: this.context },
+                this.props.children
+            ),
+            this.container,
+            this.props.deepClear
+        );
     }
 
 }

@@ -3,7 +3,6 @@ export * from "./utils";
 export * from "./updateComponent";
 export * from "./Ticker";
 export * from "./Component";
-export * from "./Fragment";
 export * from "./HElement";
 export * from "./Reference";
 export * from "./render";

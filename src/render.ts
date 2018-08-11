@@ -1,15 +1,15 @@
 import { HElement } from "./HElement";
-import { clearChildNodes, flatten } from "./utils";
+import { _clearChildren, _flatten } from "./utils";
 import { Ticker } from "./Ticker";
 
 export function render(node: any, root: Node, deepClear = true) {
 
-    clearChildNodes(root, deepClear);
-    Ticker.tick();
+    _clearChildren(root, deepClear);
+    Ticker._tick();
 
-    flatten([node]).forEach(element => {
+    _flatten([node]).forEach(element => {
         if (element instanceof HElement) {
-            flatten<Node>([element.toNode()]).forEach(child => {
+            _flatten<Node>([element.toNode()]).forEach(child => {
                 root.appendChild(child);
             });
         } else if (typeof element === 'string') {

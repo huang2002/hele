@@ -1,16 +1,26 @@
-import { RawProps, Props, applyPropsToNode, applyPropsToComponent } from "./props";
-import { ComponentGetter, ComponentConstructor, Component } from "./Component";
-import { parsePossibleElement, flatten } from "./utils";
+import { RawProps, Props, _createNode, _createComponent } from "./props";
+import { ComponentGetter, ComponentConstructor, Component, Context } from "./Component";
+import { _flatten } from "./utils";
 
 export const elementMap = new Map<Component<any>, HElement<any>>();
 
-export function convertPossibleElementToNode(
+export function _parseEle(element: any): HElement | null | (HElement | null)[] {
+    if (element instanceof HElement) {
+        return element;
+    } else if (element instanceof Array) {
+        return element.map(_parseEle) as (HElement | null)[];
+    } else {
+        return null;
+    }
+}
+
+export function _toNode(
     element: null | HElement | (HElement | null)[]
 ): Node | Node[] {
     if (element instanceof HElement) {
         return element.toNode();
     } else if (element instanceof Array) {
-        return flatten(element.map(convertPossibleElementToNode) as Node[]);
+        return _flatten(element.map(_toNode) as Node[]);
     } else {
         return document.createTextNode('');
     }
@@ -30,26 +40,34 @@ export class HElement<P extends RawProps = RawProps> {
     readonly props: Props & P;
     parent?: HElement<any> = undefined;
     node?: Node | Node[] = undefined;
+    context: any = undefined;
 
     toNode(): Node | Node[] {
         const { type, props } = this;
         let node;
         if (typeof type === 'string') {
             node = document.createElement(type);
-            applyPropsToNode(props, node);
+            _createNode(props, node);
         } else {
-            const { element, component } = applyPropsToComponent<P>(props, type),
-                parsedElement = parsePossibleElement(element);
-            node = parsedElement instanceof Array ?
-                flatten<Node>(parsedElement.map(convertPossibleElementToNode)) :
-                convertPossibleElementToNode(parsedElement);
+            const { element, component } = _createComponent<P>(type, props, this.context),
+                parsedElement = _parseEle(element);
+            // @ts-ignore
+            if (type === Context) {
+                // @ts-ignore
+                this.context = component.value;
+            }
             if (parsedElement) {
-                flatten<HElement | null>([parsedElement]).forEach(ele => {
+                const { context } = this;
+                _flatten<HElement | null>([parsedElement]).forEach(ele => {
                     if (ele) {
                         ele.parent = this;
+                        ele.context = context;
                     }
                 });
             }
+            node = parsedElement instanceof Array ?
+                _flatten<Node>(parsedElement.map(_toNode)) :
+                _toNode(parsedElement);
             if (component) {
                 elementMap.set(component, this);
                 try {

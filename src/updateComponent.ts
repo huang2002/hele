@@ -1,18 +1,17 @@
 import { Component } from "./Component";
-import { elementMap, HElement } from "./HElement";
-import { flatten } from "./utils";
-import { clearChildNodes } from "./utils";
+import { HElement, elementMap } from "./HElement";
+import { _flatten, _clearChildren } from "./utils";
 
-export function updateComponent(component: Component<any>) {
+export function _updateComponent(component: Component<any>) {
     const oldElement = elementMap.get(component);
     if (oldElement) {
         const { node } = oldElement;
         if (node) {
             const { parent } = oldElement,
-                nodes = flatten<Node>([node]);
+                nodes = _flatten<Node>([node]);
             nodes.forEach((n, i) => {
                 const { parentNode } = n;
-                clearChildNodes(n, true);
+                _clearChildren(n, true);
                 if (parentNode) {
                     if (i === 0) {
                         const newElement = component.toElement();
@@ -20,7 +19,7 @@ export function updateComponent(component: Component<any>) {
                             newElement.parent = parent;
                             elementMap.set(component, newElement);
                             const newNode = newElement.toNode(),
-                                newNodes = flatten<Node>([newNode]),
+                                newNodes = _flatten<Node>([newNode]),
                                 fragment = document.createDocumentFragment();
                             if (parent) {
                                 if (parent.node instanceof Array) {

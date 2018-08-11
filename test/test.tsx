@@ -1,6 +1,6 @@
 /// <reference types="../" />
 
-const { render, Component, Fragment, Portal, Reference } = HEle;
+const { render, Component, Fragment, Portal, Context, Reference } = HEle;
 
 const commonHooks = [
     'onWillMount', 'onDidMount',
@@ -39,11 +39,11 @@ interface GreetingState {
     target: string;
 }
 class Greeting extends Component<GreetingProps, GreetingState> {
-    constructor(props: GreetingProps) {
-        super(props);
+    constructor(props: GreetingProps, context: any) {
+        super(props, context);
         this.clickHandler = this.clickHandler.bind(this);
         this.state = {
-            target: props.defaultTarget as string
+            target: props.defaultTarget!
         };
     }
     static defaultProps = {
@@ -70,13 +70,14 @@ logHooks(Greeting);
 
 interface ClockProps {
     color?: string;
+    colorId?: string;
 }
 interface ClockState {
     date: Date;
 }
 class Clock extends Component<ClockProps, ClockState> {
-    constructor(props: ClockProps) {
-        super(props);
+    constructor(props: ClockProps, context: any) {
+        super(props, context);
         this.state = {
             date: new Date()
         };
@@ -93,8 +94,11 @@ class Clock extends Component<ClockProps, ClockState> {
         }, 500);
     }
     render() {
+        const { colorId } = this.props;
         return (
-            <p style={{ color: this.props.color as string }} class="clock">
+            <p
+                style={{ color: colorId ? this.context['color' + colorId] : this.props.color! }}
+                class="clock">
                 {this.state.date.toLocaleString()}
             </p>
         );
@@ -120,16 +124,18 @@ logHooks(App);
 const appRef = new Reference();
 render(
     (
-        <Fragment>
-            <Clock color="green" />
-            <App ref={appRef} />
-            <Portal container={document.getElementById('portal') as HTMLElement}>
-                <Clock color="lightblue" />
-            </Portal>
-            <Portal>
-                <Clock color="purple" />
-            </Portal>
-        </Fragment>
+        <Context value={{ color0: 'lightblue' }}>
+            <Context value={{ color1: 'purple' }}>
+                <Clock color="green" />
+                <App ref={appRef} />
+                <Portal container={document.getElementById('portal')!}>
+                    <Clock colorId="0" />
+                </Portal>
+                <Portal>
+                    <Clock colorId="1" />
+                </Portal>
+            </Context>
+        </Context>
     ),
-    document.getElementById('root') as HTMLElement
+    document.getElementById('root')!
 );

@@ -1,8 +1,8 @@
 import { Component } from "./Component";
 import { elementMap } from "./HElement";
-import { updateComponent } from "./updateComponent";
+import { _updateComponent } from "./updateComponent";
 
-export const expiredComponents = new Set<Component<any>>();
+export const _expiredComponents = new Set<Component<any>>();
 
 export type TickMethod = (callback: () => void) => void;
 
@@ -17,15 +17,15 @@ export const Ticker = {
     maxClearCountPerTick: 100,
     maxUpdateCountPerTick: 100,
 
-    willTick: false,
+    _willTick: false,
 
-    tick() {
-        if (!Ticker.willTick) {
+    _tick() {
+        if (!Ticker._willTick) {
             Ticker.tickMethod(() => {
-                Ticker.willTick = false;
+                Ticker._willTick = false;
 
                 let updateCount = 0;
-                expiredComponents.forEach(component => {
+                _expiredComponents.forEach(component => {
                     if (updateCount++ < Ticker.maxUpdateCountPerTick) {
                         const { state, updateRequestCallbacks } = component,
                             newState = updateRequestCallbacks.reduce((s, cb) => ({ ...s, ...cb(s) }), { ...state });
@@ -35,13 +35,13 @@ export const Ticker = {
                                 const snapshot = component.onWillUpdate(state);
                                 Object.assign(state, newState);
                                 component.onDidUpdate(snapshot);
-                                updateComponent(component);
+                                _updateComponent(component);
                             }
                         } catch (error) {
                             component.onUncaughtError(error);
                         }
                     }
-                    expiredComponents.delete(component);
+                    _expiredComponents.delete(component);
                 });
 
                 const { maxClearCountPerTick } = Ticker;
@@ -67,13 +67,13 @@ export const Ticker = {
                 }
 
             });
-            Ticker.willTick = true;
+            Ticker._willTick = true;
         }
     },
 
-    updateComponent(component: Component<any>) {
-        expiredComponents.add(component);
-        Ticker.tick();
+    _updateComponent(component: Component<any>) {
+        _expiredComponents.add(component);
+        Ticker._tick();
     }
 
 };

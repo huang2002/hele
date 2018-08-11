@@ -1,12 +1,6 @@
-import { HElement } from "./HElement";
-
-export function isEqualValue(a: any, b: any) {
-    return a === b || a !== a && b !== b;
-}
-
 export function isEqual(a: any, b: any) {
 
-    if (isEqualValue(a, b)) {
+    if (a === b || a !== a && b !== b) {
         return true;
     }
 
@@ -18,13 +12,13 @@ export function isEqual(a: any, b: any) {
     }
 
     for (const key in a) {
-        if (!isEqual(a[key], b[key])) {
+        if (!((key in b) && isEqual(a[key], b[key]))) {
             return false;
         }
     }
 
     for (const key in b) {
-        if (!isEqual(a[key], b[key])) {
+        if (!(key in a)) {
             return false;
         }
     }
@@ -33,16 +27,16 @@ export function isEqual(a: any, b: any) {
 
 }
 
-export function clearChildNodes(node: Node, deep = false) {
+export function _clearChildren(node: Node, deep = false) {
     [...node.childNodes].forEach(childNode => {
         if (deep) {
-            clearChildNodes(childNode, true);
+            _clearChildren(childNode, true);
         }
         node.removeChild(childNode);
     });
 }
 
-export function flatten<T, U = T>(array: (T | U[])[]) {
+export function _flatten<T, U = T>(array: (T | U[])[]) {
     const ans = new Array<T | U>();
     array.forEach(ele => {
         if (ele instanceof Array) {
@@ -54,14 +48,4 @@ export function flatten<T, U = T>(array: (T | U[])[]) {
         }
     });
     return ans;
-}
-
-export function parsePossibleElement(element: any): HElement | null | (HElement | null)[] {
-    if (element instanceof HElement) {
-        return element;
-    } else if (element instanceof Array) {
-        return element.map(parsePossibleElement) as HElement[];
-    } else {
-        return null;
-    }
 }

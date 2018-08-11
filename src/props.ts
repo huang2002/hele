@@ -35,8 +35,7 @@ export const specialNodePropProcessors = new Map<string, SpecialPropProcessor<No
     }],
     ['class', (classNames: string | any[], node) => {
         if ('setAttribute' in node) {
-            // @ts-ignore
-            node.setAttribute(
+            (node as Element).setAttribute(
                 'class',
                 typeof classNames === 'string' ?
                     classNames :
@@ -60,7 +59,7 @@ const eventPattern = /^on(\w+)$/i,
     captruePattern = /capture/i,
     nonpassivePattern = /nonpassive/i,
     oncePattern = /once/i;
-export function sliceEventName(
+export function _sliceEventName(
     rawEvent: string, useCapture: boolean, nonpassive: boolean, once: boolean
 ) {
     let t = 0;
@@ -75,14 +74,14 @@ export function sliceEventName(
     }
     return t > 0 ? rawEvent.slice(0, -t) : rawEvent;
 }
-export function getEventOption(
+export function _getEventOption(
     capture: boolean, nonpassive: boolean, once: boolean
 ): boolean | AddEventListenerOptions {
     return (!nonpassive && !capture && !once) ?
         false :
         { capture, passive: !nonpassive, once };
 }
-export function applyPropsToNode(props: Props, node: Node) {
+export function _createNode(props: Props, node: Node) {
     for (const key in props) {
         const value = props[key],
             processor = specialNodePropProcessors.get(key);
@@ -93,11 +92,10 @@ export function applyPropsToNode(props: Props, node: Node) {
                 capture = captruePattern.test(rawEvent),
                 nonpassive = nonpassivePattern.test(rawEvent),
                 once = oncePattern.test(rawEvent),
-                event = sliceEventName(rawEvent, capture, nonpassive, once);
-            node.addEventListener(event, value, getEventOption(capture, nonpassive, once));
+                event = _sliceEventName(rawEvent, capture, nonpassive, once);
+            node.addEventListener(event, value, _getEventOption(capture, nonpassive, once));
         } else if (!(key in node) && ('setAttribute' in node)) {
-            // @ts-ignore
-            node.setAttribute(key, value);
+            (node as Element).setAttribute(key, value);
         } else {
             // @ts-ignore
             node[key] = value;
@@ -105,16 +103,18 @@ export function applyPropsToNode(props: Props, node: Node) {
     }
 }
 
-export interface ApplyPropsToComponentResult<P extends RawProps = RawProps> {
+export interface CreateComponentResult<P extends RawProps = RawProps> {
     element: any;
     component: Component<P> | null;
 }
-export function applyPropsToComponent<P extends RawProps = RawProps>(props: Props & P, componentGetter: ComponentGetter<P>) {
+export function _createComponent<P extends RawProps = RawProps>(
+    componentGetter: ComponentGetter<P>, props: Props & P, context: any
+) {
 
-    const result: ApplyPropsToComponentResult<P> = { element: null, component: null };
+    const result: CreateComponentResult<P> = { element: null, component: null };
 
     if (componentGetter.prototype instanceof Component) {
-        const component = result.component = new (componentGetter as ComponentConstructor<P>)(props);
+        const component = result.component = new (componentGetter as ComponentConstructor<P>)(props, context);
         for (const key in props) {
             const processor = specialComponentPropProcessors.get(key);
             if (processor) {
@@ -134,7 +134,7 @@ export function applyPropsToComponent<P extends RawProps = RawProps>(props: Prop
                 processor(props[key], undefined);
             }
         }
-        const element = (componentGetter as ComponentFactory<P>)(props);
+        const element = (componentGetter as ComponentFactory<P>)(props, context);
         result.element = element;
     }
 

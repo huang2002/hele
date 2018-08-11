@@ -1,6 +1,6 @@
 "use strict";
 /// <reference types="../" />
-const { render, Component, Fragment, Portal, Reference } = HEle;
+const { render, Component, Fragment, Portal, Context, Reference } = HEle;
 const commonHooks = [
     'onWillMount', 'onDidMount',
     'onWillUnmount', 'onDidUnmount'
@@ -26,8 +26,8 @@ const GreetingTarget = props => {
     return HEle.createElement("span", { style: "color: blue;" }, props.children);
 };
 class Greeting extends Component {
-    constructor(props) {
-        super(props);
+    constructor(props, context) {
+        super(props, context);
         this.clickHandler = this.clickHandler.bind(this);
         this.state = {
             target: props.defaultTarget
@@ -53,8 +53,8 @@ Greeting.defaultProps = {
 };
 logHooks(Greeting);
 class Clock extends Component {
-    constructor(props) {
-        super(props);
+    constructor(props, context) {
+        super(props, context);
         this.timer = -1;
         this.state = {
             date: new Date()
@@ -70,7 +70,8 @@ class Clock extends Component {
         }, 500);
     }
     render() {
-        return (HEle.createElement("p", { style: { color: this.props.color }, class: "clock" }, this.state.date.toLocaleString()));
+        const { colorId } = this.props;
+        return (HEle.createElement("p", { style: { color: colorId ? this.context['color' + colorId] : this.props.color }, class: "clock" }, this.state.date.toLocaleString()));
     }
     onWillUnmount() {
         clearInterval(this.timer);
@@ -87,10 +88,11 @@ class App extends Component {
 }
 logHooks(App);
 const appRef = new Reference();
-render((HEle.createElement(Fragment, null,
-    HEle.createElement(Clock, { color: "green" }),
-    HEle.createElement(App, { ref: appRef }),
-    HEle.createElement(Portal, { container: document.getElementById('portal') },
-        HEle.createElement(Clock, { color: "lightblue" })),
-    HEle.createElement(Portal, null,
-        HEle.createElement(Clock, { color: "purple" })))), document.getElementById('root'));
+render((HEle.createElement(Context, { value: { color0: 'lightblue' } },
+    HEle.createElement(Context, { value: { color1: 'purple' } },
+        HEle.createElement(Clock, { color: "green" }),
+        HEle.createElement(App, { ref: appRef }),
+        HEle.createElement(Portal, { container: document.getElementById('portal') },
+            HEle.createElement(Clock, { colorId: "0" })),
+        HEle.createElement(Portal, null,
+            HEle.createElement(Clock, { colorId: "1" }))))), document.getElementById('root'));
