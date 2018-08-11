@@ -1,3 +1,7 @@
+### 0.8.2 - 2018-08-11
+
+- Fix a bug in class prop handling
+
 ### 0.8.1 - 2018-08-11
 
 - Fix two bugs in updating

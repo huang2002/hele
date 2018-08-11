@@ -55,7 +55,7 @@ class Greeting extends Component<GreetingProps, GreetingState> {
                 <h1>
                     Hi, <GreetingTarget>{this.state.target}</GreetingTarget>!
                 </h1>
-                <button onclick={this.clickHandler}>Change target</button>
+                <button onclick={this.clickHandler} class={['button', 0, null, true]}>Change target</button>
             </Fragment>
         );
     }
@@ -94,7 +94,7 @@ class Clock extends Component<ClockProps, ClockState> {
     }
     render() {
         return (
-            <p style={{ color: this.props.color as string, fontWeight: 'bold' }}>
+            <p style={{ color: this.props.color as string }} class="clock">
                 {this.state.date.toLocaleString()}
             </p>
         );

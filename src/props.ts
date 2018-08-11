@@ -37,6 +37,7 @@ export const specialNodePropProcessors = new Map<string, SpecialPropProcessor<No
         if ('setAttribute' in node) {
             // @ts-ignore
             node.setAttribute(
+                'class',
                 typeof classNames === 'string' ?
                     classNames :
                     classNames.filter(name => typeof name === 'string').join(' ')

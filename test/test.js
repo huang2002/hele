@@ -39,7 +39,7 @@ class Greeting extends Component {
                 "Hi, ",
                 HEle.createElement(GreetingTarget, null, this.state.target),
                 "!"),
-            HEle.createElement("button", { onclick: this.clickHandler }, "Change target")));
+            HEle.createElement("button", { onclick: this.clickHandler, class: ['button', 0, null, true] }, "Change target")));
     }
     clickHandler() {
         const target = prompt('New target:', this.state.target);
@@ -70,7 +70,7 @@ class Clock extends Component {
         }, 500);
     }
     render() {
-        return (HEle.createElement("p", { style: { color: this.props.color, fontWeight: 'bold' } }, this.state.date.toLocaleString()));
+        return (HEle.createElement("p", { style: { color: this.props.color }, class: "clock" }, this.state.date.toLocaleString()));
     }
     onWillUnmount() {
         clearInterval(this.timer);
