@@ -35,14 +35,14 @@ const GreetingTarget: HEle.ComponentFactory<GreetingTargetProps> = props => {
 interface GreetingProps {
     defaultTarget?: string;
 }
-interface GreetingStates {
+interface GreetingState {
     target: string;
 }
-class Greeting extends Component<GreetingProps, GreetingStates> {
+class Greeting extends Component<GreetingProps, GreetingState> {
     constructor(props: GreetingProps) {
         super(props);
         this.clickHandler = this.clickHandler.bind(this);
-        this.states = {
+        this.state = {
             target: props.defaultTarget as string
         };
     }
@@ -53,14 +53,14 @@ class Greeting extends Component<GreetingProps, GreetingStates> {
         return (
             <Fragment>
                 <h1>
-                    Hi, <GreetingTarget>{this.states.target}</GreetingTarget>!
+                    Hi, <GreetingTarget>{this.state.target}</GreetingTarget>!
                 </h1>
                 <button onclick={this.clickHandler}>Change target</button>
             </Fragment>
         );
     }
     clickHandler() {
-        const target = prompt('New target:', this.states.target);
+        const target = prompt('New target:', this.state.target);
         if (target !== null) {
             this.update({ target });
         }
@@ -71,13 +71,13 @@ logHooks(Greeting);
 interface ClockProps {
     color?: string;
 }
-interface ClockStates {
+interface ClockState {
     date: Date;
 }
-class Clock extends Component<ClockProps, ClockStates> {
+class Clock extends Component<ClockProps, ClockState> {
     constructor(props: ClockProps) {
         super(props);
-        this.states = {
+        this.state = {
             date: new Date()
         };
     }
@@ -95,7 +95,7 @@ class Clock extends Component<ClockProps, ClockStates> {
     render() {
         return (
             <p style={{ color: this.props.color as string, fontWeight: 'bold' }}>
-                {this.states.date.toLocaleString()}
+                {this.state.date.toLocaleString()}
             </p>
         );
     }

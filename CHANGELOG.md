@@ -1,3 +1,7 @@
+## 0.8.0 - 2018-08-11
+
+- Rename states state
+
 ## 0.7.0 - 2018-08-08
 
 - Add newStates parameter to component.onWillUpdate

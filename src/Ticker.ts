@@ -27,13 +27,13 @@ export const Ticker = {
                 let updateCount = 0;
                 expiredComponents.forEach(component => {
                     if (updateCount++ < Ticker.maxUpdateCountPerTick) {
-                        const { states, updateRequestCallbacks } = component,
-                            newStates = updateRequestCallbacks.reduce((s, cb) => cb(s), { ...states });
+                        const { state, updateRequestCallbacks } = component,
+                            newState = updateRequestCallbacks.reduce((s, cb) => cb(s), { ...state });
                         updateRequestCallbacks.length = 0;
                         try {
-                            if (component.shouldUpdate(states, newStates)) {
-                                const snapshot = component.onWillUpdate(states);
-                                Object.assign(states, newStates);
+                            if (component.shouldUpdate(state, newState)) {
+                                const snapshot = component.onWillUpdate(state);
+                                Object.assign(state, newState);
                                 component.onDidUpdate(snapshot);
                                 updateComponent(component);
                             }

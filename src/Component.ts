@@ -10,7 +10,7 @@ export interface ComponentConstructor<P extends RawProps = RawProps, S = any, SS
 export type ComponentFactory<P extends RawProps = RawProps> = (props: P) => any;
 export type ComponentGetter<P extends RawProps = RawProps, S = any, SS = any> = ComponentConstructor<P, S, SS> | ComponentFactory<P>;
 
-export type UpdateRequestCallback<S> = (oldStates: S) => Partial<S>;
+export type UpdateRequestCallback<S> = (oldState: S) => Partial<S>;
 
 export abstract class Component<P extends RawProps = RawProps, S = any, SS = any> {
 
@@ -23,7 +23,7 @@ export abstract class Component<P extends RawProps = RawProps, S = any, SS = any
     static defaultProps: RawProps = {};
 
     props: Readonly<P & Props>;
-    states: S = {} as S;
+    state: S = {} as S;
     refs = new Map<string, Reference>();
     updateRequestCallbacks = new Array<UpdateRequestCallback<S>>();
 
@@ -42,11 +42,11 @@ export abstract class Component<P extends RawProps = RawProps, S = any, SS = any
 
     onWillMount() { }
     onDidMount() { }
-    shouldUpdate(oldStates: S, newStates: S) {
-        return !isEqual(oldStates, newStates);
+    shouldUpdate(oldState: S, newState: S) {
+        return !isEqual(oldState, newState);
     }
     // @ts-ignore
-    onWillUpdate(newStates: S): SS { }
+    onWillUpdate(newState: S): SS { }
     onDidUpdate(snapShot: SS) { }
     onWillUnmount() { }
     onDidUnmount() { }
@@ -70,8 +70,8 @@ export abstract class Component<P extends RawProps = RawProps, S = any, SS = any
         Ticker.updateComponent(this);
         return this;
     }
-    update(newStates: Partial<S>) {
-        return this.requestUpdate(() => newStates);
+    update(newState: Partial<S>) {
+        return this.requestUpdate(() => newState);
     }
 
 }
