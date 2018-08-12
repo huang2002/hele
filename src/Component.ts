@@ -55,12 +55,12 @@ export abstract class Component<P extends RawProps = RawProps, S = any, SS = any
         console.error('UncaughtError:', error);
     }
 
-    createRef(name: string) {
+    createRef<T extends Node | Component = Node | Component>(name: string) {
         const { refs } = this;
         if (refs.has(name)) {
-            return refs.get(name)!;
+            return refs.get(name) as Reference<T>;
         } else {
-            const ref = new Reference<any>();
+            const ref = new Reference<T>();
             refs.set(name, ref);
             return ref;
         }
@@ -83,16 +83,15 @@ export const Fragment: ComponentFactory = (props) => {
     return _flatten<any>(props.children);
 };
 
-export interface ContextProps {
-    value: any;
+export interface ContextProps<V = any> {
+    value: V;
 }
 
-export class Context extends Component<ContextProps> {
-    constructor(props: ContextProps, context: any) {
+export class Context<V = any> extends Component<ContextProps, V> {
+    constructor(props: ContextProps<V>, context: any) {
         super(props, context);
-        this.value = { ...context, ...props.value };
+        this.state = Object.assign({}, context, props.value);
     }
-    value: any;
     render() {
         return _flatten<any>(this.props.children);
     }

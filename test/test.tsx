@@ -81,9 +81,11 @@ class Clock extends Component<ClockProps, ClockState> {
         this.state = {
             date: new Date()
         };
+        this.color = props.colorId ? context['color' + props.colorId] : this.props.color!;
     }
     static defaultProps = { color: 'lightgreen' };
     timer: number = -1;
+    color: string;
     updateTime() {
         this.update({ date: new Date() });
     }
@@ -94,11 +96,8 @@ class Clock extends Component<ClockProps, ClockState> {
         }, 500);
     }
     render() {
-        const { colorId } = this.props;
         return (
-            <p
-                style={{ color: colorId ? this.context['color' + colorId] : this.props.color! }}
-                class="clock">
+            <p style={{ color: this.color }} class="clock">
                 {this.state.date.toLocaleString()}
             </p>
         );

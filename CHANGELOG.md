@@ -1,3 +1,8 @@
+## 0.11.0 - 2018-08-12
+
+- Add context updating
+- Improve some type declarations
+
 ## 0.10.0 - 2018-08-12
 
 - Improve update request handling

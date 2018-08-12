@@ -59,6 +59,7 @@ class Clock extends Component {
         this.state = {
             date: new Date()
         };
+        this.color = props.colorId ? context['color' + props.colorId] : this.props.color;
     }
     updateTime() {
         this.update({ date: new Date() });
@@ -70,8 +71,7 @@ class Clock extends Component {
         }, 500);
     }
     render() {
-        const { colorId } = this.props;
-        return (HEle.createElement("p", { style: { color: colorId ? this.context['color' + colorId] : this.props.color }, class: "clock" }, this.state.date.toLocaleString()));
+        return (HEle.createElement("p", { style: { color: this.color }, class: "clock" }, this.state.date.toLocaleString()));
     }
     onWillUnmount() {
         clearInterval(this.timer);

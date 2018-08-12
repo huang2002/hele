@@ -53,8 +53,7 @@ export class HElement<P extends RawProps = RawProps> {
                 parsedElement = _parseEle(element);
             // @ts-ignore
             if (type === Context) {
-                // @ts-ignore
-                this.context = component.value;
+                this.context = component!.state;
             }
             if (parsedElement) {
                 const { context } = this;
