@@ -1,9 +1,9 @@
 import { Component } from "./Component";
-import { HElement, elementMap } from "./HElement";
+import { HElement, _eleMap } from "./HElement";
 import { _flatten, _clearChildren } from "./utils";
 
 export function _updateComponent(component: Component<any>) {
-    const oldElement = elementMap.get(component);
+    const oldElement = _eleMap.get(component);
     if (oldElement) {
         const { node } = oldElement;
         if (node) {
@@ -17,7 +17,7 @@ export function _updateComponent(component: Component<any>) {
                         const newElement = component.toElement();
                         if (newElement instanceof HElement) {
                             newElement.parent = parent;
-                            elementMap.set(component, newElement);
+                            _eleMap.set(component, newElement);
                             const newNode = newElement.toNode(),
                                 newNodes = _flatten<Node>([newNode]),
                                 fragment = document.createDocumentFragment();
@@ -40,7 +40,7 @@ export function _updateComponent(component: Component<any>) {
                             });
                             parentNode.replaceChild(fragment, n);
                         } else {
-                            elementMap.delete(component);
+                            _eleMap.delete(component);
                             parentNode.removeChild(n);
                         }
                     } else {

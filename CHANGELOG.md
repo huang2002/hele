@@ -1,3 +1,8 @@
+### 0.9.1 - 2018-08-12
+
+- Improve internals
+- Improve CHANGELOG.md
+
 ## 0.9.0 - 2018-08-11
 
 - Add `Context`
@@ -8,7 +13,7 @@
 
 ### 0.8.2 - 2018-08-11
 
-- Fix a bug in class prop handling
+- Fix a bug in `class` prop handling
 
 ### 0.8.1 - 2018-08-11
 
@@ -60,7 +65,7 @@
 
 - Preserve special props
 - Improve type declarations
-- Modify the default message in `onUncaughtError`
+- Modify the default message in `component.onUncaughtError`
 
 ### 0.3.1 - 2018-08-02
 

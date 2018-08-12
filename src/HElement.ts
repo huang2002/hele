@@ -2,7 +2,7 @@ import { RawProps, Props, _createNode, _createComponent } from "./props";
 import { ComponentGetter, ComponentConstructor, Component, Context } from "./Component";
 import { _flatten } from "./utils";
 
-export const elementMap = new Map<Component<any>, HElement<any>>();
+export const _eleMap = new Map<Component<any>, HElement<any>>();
 
 export function _parseEle(element: any): HElement | null | (HElement | null)[] {
     if (element instanceof HElement) {
@@ -69,7 +69,7 @@ export class HElement<P extends RawProps = RawProps> {
                 _flatten<Node>(parsedElement.map(_toNode)) :
                 _toNode(parsedElement);
             if (component) {
-                elementMap.set(component, this);
+                _eleMap.set(component, this);
                 try {
                     component.onDidMount();
                 } catch (error) {

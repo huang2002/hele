@@ -1,5 +1,5 @@
 import { Component } from "./Component";
-import { elementMap } from "./HElement";
+import { _eleMap } from "./HElement";
 import { _updateComponent } from "./updateComponent";
 
 export const _expiredComponents = new Set<Component<any>>();
@@ -49,14 +49,14 @@ export const Ticker = {
                     clearCount = 0;
                 while (hasElementDeleted && clearCount++ < maxClearCountPerTick) {
                     hasElementDeleted = false;
-                    elementMap.forEach((element, component) => {
+                    _eleMap.forEach((element, component) => {
                         const { node } = element;
                         if (node) {
                             if (!(node instanceof Array ? node[0] : node).parentNode) {
                                 hasElementDeleted = true;
                                 try {
                                     component.onWillUnmount();
-                                    elementMap.delete(component);
+                                    _eleMap.delete(component);
                                     component.onDidUnmount();
                                 } catch (error) {
                                     component.onUncaughtError(error);
