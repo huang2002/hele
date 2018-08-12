@@ -10,7 +10,7 @@ export interface ComponentConstructor<P extends RawProps = RawProps, S = any, SS
 export type ComponentFactory<P extends RawProps = RawProps> = (props: P, context: any) => any;
 export type ComponentGetter<P extends RawProps = RawProps, S = any, SS = any> = ComponentConstructor<P, S, SS> | ComponentFactory<P>;
 
-export type UpdateRequestCallback<S> = (oldState: S) => Partial<S>;
+export type UpdateRequestCallback<S> = (state: S) => S | void;
 
 export abstract class Component<P extends RawProps = RawProps, S = any, SS = any> {
 
@@ -72,7 +72,9 @@ export abstract class Component<P extends RawProps = RawProps, S = any, SS = any
         return this;
     }
     update(newState: Partial<S>) {
-        return this.requestUpdate(() => newState);
+        return this.requestUpdate(state => {
+            Object.assign(state, newState);
+        });
     }
 
 }

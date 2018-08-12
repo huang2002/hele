@@ -1,3 +1,7 @@
+## 0.10.0 - 2018-08-12
+
+- Improve update request handling
+
 ### 0.9.1 - 2018-08-12
 
 - Improve internals
