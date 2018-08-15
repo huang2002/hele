@@ -5,4 +5,3 @@ tsconfig.json
 terser.json
 rollup.config.js
 .babelrc
-typings/*.d.ts.map

@@ -2,6 +2,7 @@
 
 - Add context updating
 - Improve some type declarations
+- Remove `*.d.ts.map`
 
 ## 0.10.0 - 2018-08-12
 
@@ -10,7 +11,7 @@
 ### 0.9.1 - 2018-08-12
 
 - Improve internals
-- Improve CHANGELOG.md
+- Improve `CHANGELOG.md`
 
 ## 0.9.0 - 2018-08-11
 
@@ -18,7 +19,7 @@
 - Add optional `deepClear` option to `Portal`
 - Add `_` to internals
 - Improve some internals
-- Improve CHANGELOG.md
+- Improve `CHANGELOG.md`
 
 ### 0.8.2 - 2018-08-11
 
