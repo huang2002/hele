@@ -79,11 +79,9 @@ export abstract class Component<P extends RawProps = RawProps, S = any, SS = any
 
 }
 
-export const Fragment: ComponentFactory = (props) => {
-    return _flatten<any>(props.children);
-};
+export const Fragment: ComponentFactory<Props> = props => _flatten<any>(props.children);
 
-export interface ContextProps<V = any> {
+export interface ContextProps<V = any> extends Props {
     value: V;
 }
 

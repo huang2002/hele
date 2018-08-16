@@ -1,3 +1,7 @@
+### 0.11.2 - 2018-08-16
+
+- Improve some type declarations
+
 ## 0.11.1 - 2018-08-16
 
 - Remove `*.d.ts.map`

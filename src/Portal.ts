@@ -1,4 +1,4 @@
-import { Component, Context } from "./Component";
+import { Component, Context, ContextProps } from "./Component";
 import { createElement } from "./createElement";
 import { Props } from "./props";
 import { render } from "./render";
@@ -32,7 +32,7 @@ export class Portal extends Component<PortalProps> {
         render(
             createElement(
                 Context,
-                { value: this.context },
+                { value: this.context } as ContextProps,
                 this.props.children
             ),
             this.container,
