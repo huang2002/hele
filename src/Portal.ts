@@ -1,11 +1,11 @@
 import { Component, Context, ContextProps } from "./Component";
 import { createElement } from "./createElement";
-import { Props } from "./props";
 import { render } from "./render";
 
-export interface PortalProps extends Props {
+export interface PortalProps {
     container?: Node;
     deepClear?: boolean;
+    children: any;
 }
 
 export class Portal extends Component<PortalProps> {
