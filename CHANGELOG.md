@@ -1,8 +1,11 @@
+## 0.11.1 - 2018-08-16
+
+- Remove `*.d.ts.map`
+
 ## 0.11.0 - 2018-08-12
 
 - Add context updating
 - Improve some type declarations
-- Remove `*.d.ts.map`
 
 ## 0.10.0 - 2018-08-12
 
