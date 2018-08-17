@@ -1,3 +1,7 @@
+### 0.11.4 - 2018-08-17
+
+- Fix non-object `state` handling
+
 ### 0.11.3 - 2018-08-16
 
 - Fix some type declarations

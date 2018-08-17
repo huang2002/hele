@@ -40,7 +40,7 @@ export const Ticker = {
                         try {
                             if (component.shouldUpdate(state, newState)) {
                                 const snapshot = component.onWillUpdate(state);
-                                Object.assign(state, newState);
+                                component.state = newState;
                                 component.onDidUpdate(snapshot);
                                 _updateComponent(component);
                             }
