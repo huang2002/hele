@@ -73,7 +73,11 @@ export abstract class Component<P extends RawProps = RawProps, S = any, SS = any
     }
     update(newState: S extends object ? Partial<S> : S) {
         return this.requestUpdate(state => {
-            Object.assign(state, newState);
+            if (newState instanceof Object && state instanceof Object) {
+                Object.assign(state, newState);
+            } else {
+                return newState as S;
+            }
         });
     }
 

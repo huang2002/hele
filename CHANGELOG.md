@@ -1,3 +1,7 @@
+### 0.11.6 - 2018-08-17
+
+- Improve `component.update`
+
 ### 0.11.5 - 2018-08-17
 
 - Improve non-object `state` handling
