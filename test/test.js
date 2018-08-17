@@ -87,6 +87,24 @@ class App extends Component {
     }
 }
 logHooks(App);
+class Counter extends Component {
+    constructor(props, context) {
+        super(props, context);
+        this.increaser = () => {
+            this.requestUpdate(state => state + 1);
+        };
+        this.state = 0;
+    }
+    render() {
+        console.log(this.state);
+        return (HEle.createElement(Fragment, null,
+            HEle.createElement("p", null,
+                "Count: ",
+                this.state),
+            HEle.createElement("button", { onclick: this.increaser }, "Count++")));
+    }
+}
+logHooks(Counter);
 const appRef = new Reference();
 render((HEle.createElement(Context, { value: { color0: 'lightblue' } },
     HEle.createElement(Context, { value: { color1: 'purple' } },
@@ -94,5 +112,6 @@ render((HEle.createElement(Context, { value: { color0: 'lightblue' } },
         HEle.createElement(App, { ref: appRef }),
         HEle.createElement(Portal, { container: document.getElementById('portal') },
             HEle.createElement(Clock, { colorId: "0" })),
+        HEle.createElement(Counter, null),
         HEle.createElement(Portal, null,
             HEle.createElement(Clock, { colorId: "1" }))))), document.getElementById('root'));

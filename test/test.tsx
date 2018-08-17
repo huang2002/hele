@@ -120,6 +120,25 @@ class App extends Component<HEle.RawProps> {
 }
 logHooks(App);
 
+class Counter extends Component<{}, number> {
+    constructor(props: {}, context: any) {
+        super(props, context);
+        this.state = 0;
+    }
+    increaser = () => {
+        this.requestUpdate(state => state + 1);
+    };
+    render() {
+        return (
+            <Fragment>
+                <p>Count: {this.state}</p>
+                <button onclick={this.increaser}>Count++</button>
+            </Fragment>
+        );
+    }
+}
+logHooks(Counter);
+
 const appRef = new Reference();
 render(
     (
@@ -130,6 +149,7 @@ render(
                 <Portal container={document.getElementById('portal')!}>
                     <Clock colorId="0" />
                 </Portal>
+                <Counter />
                 <Portal>
                     <Clock colorId="1" />
                 </Portal>

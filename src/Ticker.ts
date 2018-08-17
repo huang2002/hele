@@ -28,7 +28,7 @@ export const Ticker = {
                 _expiredComponents.forEach(component => {
                     if (updateCount++ < Ticker.maxUpdateCountPerTick) {
                         const { state, updateRequestCallbacks } = component;
-                        let newState = { ...state },
+                        let newState = state instanceof Object ? { ...state } : state,
                             t;
                         updateRequestCallbacks.forEach(callback => {
                             t = callback(newState);

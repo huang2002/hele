@@ -71,7 +71,7 @@ export abstract class Component<P extends RawProps = RawProps, S = any, SS = any
         Ticker._updateComponent(this);
         return this;
     }
-    update(newState: Partial<S>) {
+    update(newState: S extends object ? Partial<S> : S) {
         return this.requestUpdate(state => {
             Object.assign(state, newState);
         });
