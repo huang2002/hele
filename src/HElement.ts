@@ -47,7 +47,7 @@ export class HElement<P extends RawProps = RawProps> {
         let node;
         if (typeof type === 'string') {
             node = document.createElement(type);
-            _createNode(props, node);
+            _createNode(props, node, this.context);
         } else {
             const { element, component } = _createComponent<P>(type, props, this.context),
                 parsedElement = _parseEle(element);

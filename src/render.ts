@@ -7,8 +7,11 @@ export function render(node: any, root: Node, deepClear = true) {
     _clearChildren(root, deepClear);
     Ticker._tick();
 
+    // @ts-ignore
+    const { context } = root;
     _flatten([node]).forEach(element => {
         if (element instanceof HElement) {
+            element.context = context;
             _flatten<Node>([element.toNode()]).forEach(child => {
                 root.appendChild(child);
             });

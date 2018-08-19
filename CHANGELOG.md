@@ -1,3 +1,8 @@
+## 0.12.0 - 2018-08-19
+
+- Add `node.context`
+- Improve context passing
+
 ### 0.11.6 - 2018-08-17
 
 - Improve `component.update`

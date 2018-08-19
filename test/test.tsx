@@ -1,4 +1,4 @@
-/// <reference types="../" />
+/// <reference types="../index" />
 
 const { render, Component, Fragment, Portal, Context, Reference } = HEle;
 
@@ -144,15 +144,17 @@ render(
     (
         <Context value={{ color0: 'lightblue' }}>
             <Context value={{ color1: 'purple' }}>
-                <Clock color="green" />
-                <App ref={appRef} />
-                <Portal container={document.getElementById('portal')!}>
-                    <Clock colorId="0" />
-                </Portal>
-                <Counter />
-                <Portal>
-                    <Clock colorId="1" />
-                </Portal>
+                <div>
+                    <Clock color="green" />
+                    <App ref={appRef} />
+                    <Portal container={document.getElementById('portal')!}>
+                        <Clock colorId="0" />
+                    </Portal>
+                    <Counter />
+                    <Portal>
+                        <Clock colorId="1" />
+                    </Portal>
+                </div>
             </Context>
         </Context>
     ),

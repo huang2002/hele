@@ -1,5 +1,5 @@
 "use strict";
-/// <reference types="../" />
+/// <reference types="../index" />
 const { render, Component, Fragment, Portal, Context, Reference } = HEle;
 const commonHooks = [
     'onWillMount', 'onDidMount',
@@ -96,7 +96,6 @@ class Counter extends Component {
         this.state = 0;
     }
     render() {
-        console.log(this.state);
         return (HEle.createElement(Fragment, null,
             HEle.createElement("p", null,
                 "Count: ",
@@ -108,10 +107,11 @@ logHooks(Counter);
 const appRef = new Reference();
 render((HEle.createElement(Context, { value: { color0: 'lightblue' } },
     HEle.createElement(Context, { value: { color1: 'purple' } },
-        HEle.createElement(Clock, { color: "green" }),
-        HEle.createElement(App, { ref: appRef }),
-        HEle.createElement(Portal, { container: document.getElementById('portal') },
-            HEle.createElement(Clock, { colorId: "0" })),
-        HEle.createElement(Counter, null),
-        HEle.createElement(Portal, null,
-            HEle.createElement(Clock, { colorId: "1" }))))), document.getElementById('root'));
+        HEle.createElement("div", null,
+            HEle.createElement(Clock, { color: "green" }),
+            HEle.createElement(App, { ref: appRef }),
+            HEle.createElement(Portal, { container: document.getElementById('portal') },
+                HEle.createElement(Clock, { colorId: "0" })),
+            HEle.createElement(Counter, null),
+            HEle.createElement(Portal, null,
+                HEle.createElement(Clock, { colorId: "1" })))))), document.getElementById('root'));

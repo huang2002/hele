@@ -81,7 +81,9 @@ export function _getEventOption(
         false :
         { capture, passive: !nonpassive, once };
 }
-export function _createNode(props: Props, node: Node) {
+export function _createNode(props: Props, node: Node, context: any) {
+    // @ts-ignore
+    node.context = context;
     for (const key in props) {
         const value = props[key],
             processor = specialNodePropProcessors.get(key);
