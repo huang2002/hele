@@ -17,6 +17,7 @@ export function _updateComponent(component: Component<any>) {
                         const newElement = component.toElement();
                         if (newElement instanceof HElement) {
                             newElement.parent = parent;
+                            newElement.context = oldElement.context;
                             _eleMap.set(component, newElement);
                             const newNode = newElement.toNode(),
                                 newNodes = _flatten<Node>([newNode]),

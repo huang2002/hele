@@ -1,3 +1,7 @@
+### 0.12.3 - 2018-08-23
+
+- Fix `context` passing
+
 ### 0.12.2 - 2018-08-23
 
 - Improve object `state` handling
@@ -9,7 +13,7 @@
 ## 0.12.0 - 2018-08-19
 
 - Add `node.context`
-- Improve context passing
+- Improve `context` passing
 
 ### 0.11.6 - 2018-08-17
 
