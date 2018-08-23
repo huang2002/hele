@@ -1,6 +1,7 @@
 import { Component } from "./Component";
 import { _eleMap } from "./HElement";
 import { _updateComponent } from "./updateComponent";
+import { _copy } from "./utils";
 
 export const _expiredComponents = new Set<Component<any>>();
 
@@ -28,7 +29,7 @@ export const Ticker = {
                 _expiredComponents.forEach(component => {
                     if (updateCount++ < Ticker.maxUpdateCountPerTick) {
                         const { state, updateRequestCallbacks } = component;
-                        let newState = state instanceof Object ? { ...state } : state,
+                        let newState = _copy(state),
                             t;
                         updateRequestCallbacks.forEach(callback => {
                             t = callback(newState);

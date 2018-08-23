@@ -1,3 +1,7 @@
+### 0.12.1 - 2018-08-23
+
+- Improve array `state` handling
+
 ## 0.12.0 - 2018-08-19
 
 - Add `node.context`
