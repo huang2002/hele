@@ -1,3 +1,7 @@
+### 0.12.2 - 2018-08-23
+
+- Improve object `state` handling
+
 ### 0.12.1 - 2018-08-23
 
 - Improve array `state` handling

@@ -54,7 +54,8 @@ export function _copy<T>(original: T) {
     if (original instanceof Array) {
         return original.slice(0);
     } else if (original instanceof Object) {
-        return Object.assign({}, original);
+        // @ts-ignore
+        return Object.create(original);
     } else {
         return original;
     }
