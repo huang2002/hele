@@ -1,3 +1,7 @@
+### 0.12.4 - 2018-08-23
+
+- Fix `dist` files
+
 ### 0.12.3 - 2018-08-23
 
 - Fix `context` passing
