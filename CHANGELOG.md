@@ -1,3 +1,7 @@
+## 0.13.0 - 2018-08-24
+
+- Improve `component.update`
+
 ### 0.12.4 - 2018-08-23
 
 - Fix `dist` files
