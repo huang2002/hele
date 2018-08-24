@@ -1,3 +1,7 @@
+### 0.13.1 - 2018-08-24
+
+- Fix a bug in `component.update`
+
 ## 0.13.0 - 2018-08-24
 
 - Improve `component.update`

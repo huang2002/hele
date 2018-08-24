@@ -60,3 +60,5 @@ export function _copy<T>(original: T) {
         return original;
     }
 }
+
+export const _isNormalObj = (obj: any) => obj instanceof Object && String(obj) === '[object Object]';

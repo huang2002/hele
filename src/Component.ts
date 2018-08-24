@@ -1,6 +1,6 @@
 import { Props, RawProps } from "./props";
 import { Reference } from "./Reference";
-import { isEqual, _flatten } from "./utils";
+import { isEqual, _flatten, _isNormalObj } from "./utils";
 import { Ticker } from "./Ticker";
 
 export interface ComponentConstructor<P extends RawProps = RawProps, S = any, SS = any> {
@@ -73,7 +73,7 @@ export abstract class Component<P extends RawProps = RawProps, S = any, SS = any
     }
     update(newState: S extends object ? Partial<S> : S) {
         return this.requestUpdate(state => {
-            if (String(newState) === '[object Object]' && String(state) === '[object Object]') {
+            if (_isNormalObj(newState) && _isNormalObj(state)) {
                 Object.assign(state, newState);
             } else {
                 return newState as S;
