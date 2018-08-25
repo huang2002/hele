@@ -1,10 +1,10 @@
 import { HElement } from "./HElement";
-import { _clearChildren, _flatten } from "./utils";
+import { _clrChd, _flatten } from "./utils";
 import { Ticker } from "./Ticker";
 
 export function render(node: any, root: Node, deepClear = true) {
 
-    _clearChildren(root, deepClear);
+    _clrChd(root, deepClear);
     Ticker._tick();
 
     // @ts-ignore
@@ -15,10 +15,13 @@ export function render(node: any, root: Node, deepClear = true) {
             _flatten<Node>([element.toNode()]).forEach(child => {
                 root.appendChild(child);
             });
-        } else if (typeof element === 'string') {
-            root.appendChild(document.createTextNode(element));
-        } else if (typeof element === 'number') {
-            root.appendChild(document.createTextNode(element.toString()));
+        } else {
+            const type = typeof element;
+            if (type === 'string') {
+                root.appendChild(document.createTextNode(element));
+            } else if (type === 'number') {
+                root.appendChild(document.createTextNode(element.toString()));
+            }
         }
     });
 

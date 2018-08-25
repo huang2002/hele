@@ -59,7 +59,7 @@ const eventPattern = /^on(\w+)$/i,
     captruePattern = /capture/i,
     nonpassivePattern = /nonpassive/i,
     oncePattern = /once/i;
-export function _sliceEventName(
+export function _slcEName(
     rawEvent: string, useCapture: boolean, nonpassive: boolean, once: boolean
 ) {
     let t = 0;
@@ -74,14 +74,14 @@ export function _sliceEventName(
     }
     return t > 0 ? rawEvent.slice(0, -t) : rawEvent;
 }
-export function _getEventOption(
+export function _getEOpt(
     capture: boolean, nonpassive: boolean, once: boolean
 ): boolean | AddEventListenerOptions {
     return (!nonpassive && !capture && !once) ?
         false :
         { capture, passive: !nonpassive, once };
 }
-export function _createNode(props: Props, node: Node, context: any) {
+export function _crtNode(props: Props, node: Node, context: any) {
     // @ts-ignore
     node.context = context;
     for (const key in props) {
@@ -94,8 +94,8 @@ export function _createNode(props: Props, node: Node, context: any) {
                 capture = captruePattern.test(rawEvent),
                 nonpassive = nonpassivePattern.test(rawEvent),
                 once = oncePattern.test(rawEvent),
-                event = _sliceEventName(rawEvent, capture, nonpassive, once);
-            node.addEventListener(event, value, _getEventOption(capture, nonpassive, once));
+                event = _slcEName(rawEvent, capture, nonpassive, once);
+            node.addEventListener(event, value, _getEOpt(capture, nonpassive, once));
         } else if (!(key in node) && ('setAttribute' in node)) {
             (node as Element).setAttribute(key, value);
         } else {
@@ -109,7 +109,7 @@ export interface CreateComponentResult<P extends RawProps = RawProps> {
     element: any;
     component: Component<P> | null;
 }
-export function _createComponent<P extends RawProps = RawProps>(
+export function _crtCom<P extends RawProps = RawProps>(
     componentGetter: ComponentGetter<P>, props: Props & P, context: any
 ) {
 

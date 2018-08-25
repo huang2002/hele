@@ -131,7 +131,8 @@ class Counter extends Component<{}, number> {
     render() {
         return (
             <Fragment>
-                <p>Count: {this.state}</p>
+                Count: {this.state}
+                <br />
                 <button onclick={this.increaser}>Count++</button>
             </Fragment>
         );
@@ -139,7 +140,15 @@ class Counter extends Component<{}, number> {
 }
 logHooks(Counter);
 
-const appRef = new Reference();
+class Lazybone extends Component {
+    render() {
+        return Date();
+    }
+}
+logHooks(Lazybone);
+
+const appRef = new Reference(),
+    lazyboneRef = new Reference<Lazybone>();
 render(
     (
         <Context value={{ color0: 'lightblue' }}>
@@ -156,6 +165,9 @@ render(
                     </Portal>
                 </div>
             </Context>
+            <Lazybone ref={lazyboneRef} />
+            <br />
+            <button onclick={() => { lazyboneRef.current!.forceUpdate() }}>tick</button>
         </Context>
     ),
     document.getElementById('root')!

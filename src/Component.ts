@@ -1,7 +1,8 @@
 import { Props, RawProps } from "./props";
 import { Reference } from "./Reference";
-import { isEqual, _flatten, _isNormalObj } from "./utils";
+import { isEqual, _flatten, _isNorObj } from "./utils";
 import { Ticker } from "./Ticker";
+import { HElement } from "./HElement";
 
 export interface ComponentConstructor<P extends RawProps = RawProps, S = any, SS = any> {
     new(props: P, context: any): Component<P, S, SS>;
@@ -27,6 +28,7 @@ export abstract class Component<P extends RawProps = RawProps, S = any, SS = any
     state: S = {} as S;
     refs = new Map<string, Reference>();
     updateRequestCallbacks = new Array<UpdateRequestCallback<S>>();
+    _forceUpdate = false;
 
     abstract render(): any;
     toElement() {
@@ -34,7 +36,15 @@ export abstract class Component<P extends RawProps = RawProps, S = any, SS = any
             ref.current = undefined;
         });
         try {
-            return this.render();
+            const result = this.render(),
+                type = typeof result;
+            if (type === 'string') {
+                return new HElement(null, { children: [result] });
+            } else if (type === 'number') {
+                return new HElement(null, { children: [result.toString()] });
+            } else {
+                return result;
+            }
         } catch (error) {
             this.onUncaughtError(error);
             return null;
@@ -73,12 +83,16 @@ export abstract class Component<P extends RawProps = RawProps, S = any, SS = any
     }
     update(newState: S extends object ? Partial<S> : S) {
         return this.requestUpdate(state => {
-            if (_isNormalObj(newState) && _isNormalObj(state)) {
+            if (_isNorObj(newState) && _isNorObj(state)) {
                 Object.assign(state, newState);
             } else {
                 return newState as S;
             }
         });
+    }
+    forceUpdate() {
+        this._forceUpdate = true;
+        Ticker._updateComponent(this);
     }
 
 }

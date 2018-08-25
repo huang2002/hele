@@ -1,8 +1,8 @@
 import { Component } from "./Component";
 import { HElement, _eleMap } from "./HElement";
-import { _flatten, _clearChildren } from "./utils";
+import { _flatten, _clrChd } from "./utils";
 
-export function _updateComponent(component: Component<any>) {
+export function _upCom(component: Component<any>) {
     const oldElement = _eleMap.get(component);
     if (oldElement) {
         const { node } = oldElement;
@@ -11,7 +11,7 @@ export function _updateComponent(component: Component<any>) {
                 nodes = _flatten<Node>([node]);
             nodes.forEach((n, i) => {
                 const { parentNode } = n;
-                _clearChildren(n, true);
+                _clrChd(n, true);
                 if (parentNode) {
                     if (i === 0) {
                         const newElement = component.toElement();

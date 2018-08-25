@@ -97,14 +97,20 @@ class Counter extends Component {
     }
     render() {
         return (HEle.createElement(Fragment, null,
-            HEle.createElement("p", null,
-                "Count: ",
-                this.state),
+            "Count: ",
+            this.state,
+            HEle.createElement("br", null),
             HEle.createElement("button", { onclick: this.increaser }, "Count++")));
     }
 }
 logHooks(Counter);
-const appRef = new Reference();
+class Lazybone extends Component {
+    render() {
+        return Date();
+    }
+}
+logHooks(Lazybone);
+const appRef = new Reference(), lazyboneRef = new Reference();
 render((HEle.createElement(Context, { value: { color0: 'lightblue' } },
     HEle.createElement(Context, { value: { color1: 'purple' } },
         HEle.createElement("div", null,
@@ -114,4 +120,7 @@ render((HEle.createElement(Context, { value: { color0: 'lightblue' } },
                 HEle.createElement(Clock, { colorId: "0" })),
             HEle.createElement(Counter, null),
             HEle.createElement(Portal, null,
-                HEle.createElement(Clock, { colorId: "1" })))))), document.getElementById('root'));
+                HEle.createElement(Clock, { colorId: "1" })))),
+    HEle.createElement(Lazybone, { ref: lazyboneRef }),
+    HEle.createElement("br", null),
+    HEle.createElement("button", { onclick: () => { lazyboneRef.current.forceUpdate(); } }, "tick"))), document.getElementById('root'));

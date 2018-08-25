@@ -1,16 +1,23 @@
-import { RawProps, Props, _createNode, _createComponent } from "./props";
+import { RawProps, Props, _crtNode, _crtCom } from "./props";
 import { ComponentGetter, ComponentConstructor, Component, Context } from "./Component";
 import { _flatten } from "./utils";
 
 export const _eleMap = new Map<Component<any>, HElement<any>>();
 
-export function _parseEle(element: any): HElement | null | (HElement | null)[] {
+export function _toEle(element: any): HElement<any> | null | (HElement<any> | null)[] {
     if (element instanceof HElement) {
         return element;
-    } else if (element instanceof Array) {
-        return element.map(_parseEle) as (HElement | null)[];
     } else {
-        return null;
+        const type = typeof element;
+        if (type === 'string') {
+            return new HElement(null, { children: [element] });
+        } else if (type === 'number') {
+            return new HElement(null, { children: [element.toString()] });
+        } else if (element instanceof Array) {
+            return element.map(_toEle) as (HElement | null)[];
+        } else {
+            return null;
+        }
     }
 }
 
@@ -20,7 +27,7 @@ export function _toNode(
     if (element instanceof HElement) {
         return element.toNode();
     } else if (element instanceof Array) {
-        return _flatten(element.map(_toNode) as Node[]);
+        return _flatten<Node>(element.map(_toNode));
     } else {
         return document.createTextNode('');
     }
@@ -29,10 +36,10 @@ export function _toNode(
 export class HElement<P extends RawProps = RawProps> {
 
     constructor(
-        public readonly type: string | ComponentGetter<P>,
+        public readonly type: string | null | ComponentGetter<P>,
         props: Props & P
     ) {
-        this.props = (typeof type !== 'string' && type.prototype instanceof Component) ?
+        this.props = (type && typeof type !== 'string' && type.prototype instanceof Component) ?
             Object.assign({}, (type as ComponentConstructor<P>).defaultProps, props) :
             props;
     }
@@ -45,12 +52,14 @@ export class HElement<P extends RawProps = RawProps> {
     toNode(): Node | Node[] {
         const { type, props } = this;
         let node;
-        if (typeof type === 'string') {
+        if (type === null) {
+            node = document.createTextNode(props.children[0]);
+        } else if (typeof type === 'string') {
             node = document.createElement(type);
-            _createNode(props, node, this.context);
+            _crtNode(props, node, this.context);
         } else {
-            const { element, component } = _createComponent<P>(type, props, this.context),
-                parsedElement = _parseEle(element);
+            const { element, component } = _crtCom<P>(type, props, this.context),
+                parsedElement = _toEle(element);
             // @ts-ignore
             if (type === Context) {
                 this.context = component!.state;

@@ -1,9 +1,9 @@
 import { Component } from "./Component";
 import { _eleMap } from "./HElement";
-import { _updateComponent } from "./updateComponent";
+import { _upCom } from "./updateComponent";
 import { _copy } from "./utils";
 
-export const _expiredComponents = new Set<Component<any>>();
+export const _expired = new Set<Component<any>>();
 
 export type TickMethod = (callback: () => void) => void;
 
@@ -26,9 +26,9 @@ export const Ticker = {
                 Ticker._willTick = false;
 
                 let updateCount = 0;
-                _expiredComponents.forEach(component => {
+                _expired.forEach(component => {
                     if (updateCount++ < Ticker.maxUpdateCountPerTick) {
-                        const { state, updateRequestCallbacks } = component;
+                        const { state, updateRequestCallbacks, _forceUpdate } = component;
                         let newState = _copy(state),
                             t;
                         updateRequestCallbacks.forEach(callback => {
@@ -39,17 +39,18 @@ export const Ticker = {
                         });
                         updateRequestCallbacks.length = 0;
                         try {
-                            if (component.shouldUpdate(state, newState)) {
+                            if (_forceUpdate || component.shouldUpdate(state, newState)) {
+                                component._forceUpdate = false;
                                 const snapshot = component.onWillUpdate(state);
                                 component.state = newState;
                                 component.onDidUpdate(snapshot);
-                                _updateComponent(component);
+                                _upCom(component);
                             }
                         } catch (error) {
                             component.onUncaughtError(error);
                         }
                     }
-                    _expiredComponents.delete(component);
+                    _expired.delete(component);
                 });
 
                 const { maxClearCountPerTick } = Ticker;
@@ -80,7 +81,7 @@ export const Ticker = {
     },
 
     _updateComponent(component: Component<any>) {
-        _expiredComponents.add(component);
+        _expired.add(component);
         Ticker._tick();
     }
 

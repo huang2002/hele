@@ -27,10 +27,10 @@ export function isEqual(a: any, b: any) {
 
 }
 
-export function _clearChildren(node: Node, deep = false) {
+export function _clrChd(node: Node, deep = false) {
     [...node.childNodes].forEach(childNode => {
         if (deep) {
-            _clearChildren(childNode, true);
+            _clrChd(childNode, true);
         }
         node.removeChild(childNode);
     });
@@ -61,4 +61,4 @@ export function _copy<T>(original: T) {
     }
 }
 
-export const _isNormalObj = (obj: any) => obj instanceof Object && String(obj) === '[object Object]';
+export const _isNorObj = (obj: any) => obj instanceof Object && String(obj) === '[object Object]';
