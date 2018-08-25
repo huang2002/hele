@@ -1,3 +1,7 @@
+### 0.14.2 - 2018-08-25
+
+- Make `component.forceUpdate` return `this`
+
 ### 0.14.1 - 2018-08-25
 
 - Shorten some internals

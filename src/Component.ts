@@ -93,6 +93,7 @@ export abstract class Component<P extends RawProps = RawProps, S = any, SS = any
     forceUpdate() {
         this._forceUp = true;
         Ticker._upCom(this);
+        return this;
     }
 
 }
