@@ -28,7 +28,7 @@ export abstract class Component<P extends RawProps = RawProps, S = any, SS = any
     state: S = {} as S;
     refs = new Map<string, Reference>();
     updateRequestCallbacks = new Array<UpdateRequestCallback<S>>();
-    _forceUpdate = false;
+    _forceUp = false;
 
     abstract render(): any;
     toElement() {
@@ -78,7 +78,7 @@ export abstract class Component<P extends RawProps = RawProps, S = any, SS = any
 
     requestUpdate(callback: UpdateRequestCallback<S>) {
         this.updateRequestCallbacks.push(callback);
-        Ticker._updateComponent(this);
+        Ticker._upCom(this);
         return this;
     }
     update(newState: S extends object ? Partial<S> : S) {
@@ -91,8 +91,8 @@ export abstract class Component<P extends RawProps = RawProps, S = any, SS = any
         });
     }
     forceUpdate() {
-        this._forceUpdate = true;
-        Ticker._updateComponent(this);
+        this._forceUp = true;
+        Ticker._upCom(this);
     }
 
 }

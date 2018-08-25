@@ -1,3 +1,7 @@
+### 0.14.1 - 2018-08-25
+
+- Shorten some internals
+
 ## 0.14.0 - 2018-08-25
 
 - Add `component.forceUpdate`

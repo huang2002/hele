@@ -28,7 +28,7 @@ export const Ticker = {
                 let updateCount = 0;
                 _expired.forEach(component => {
                     if (updateCount++ < Ticker.maxUpdateCountPerTick) {
-                        const { state, updateRequestCallbacks, _forceUpdate } = component;
+                        const { state, updateRequestCallbacks, _forceUp } = component;
                         let newState = _copy(state),
                             t;
                         updateRequestCallbacks.forEach(callback => {
@@ -39,8 +39,8 @@ export const Ticker = {
                         });
                         updateRequestCallbacks.length = 0;
                         try {
-                            if (_forceUpdate || component.shouldUpdate(state, newState)) {
-                                component._forceUpdate = false;
+                            if (_forceUp || component.shouldUpdate(state, newState)) {
+                                component._forceUp = false;
                                 const snapshot = component.onWillUpdate(state);
                                 component.state = newState;
                                 component.onDidUpdate(snapshot);
@@ -80,7 +80,7 @@ export const Ticker = {
         }
     },
 
-    _updateComponent(component: Component<any>) {
+    _upCom(component: Component<any>) {
         _expired.add(component);
         Ticker._tick();
     }
