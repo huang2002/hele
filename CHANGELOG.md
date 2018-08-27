@@ -1,3 +1,10 @@
+## 0.15.0 - 2018-08-27
+
+- Remove `Ticker.maxUpdateCountPerTick` & `Ticker.maxClearCountPerTick`
+- Add `Ticker.maxUpdateTime` & `Ticker.maxClearTime`
+- Rename some internals
+- Remove `.npmignore`
+
 ### 0.14.2 - 2018-08-25
 
 - Make `component.forceUpdate` return `this`

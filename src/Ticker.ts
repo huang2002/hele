@@ -15,19 +15,20 @@ export const Ticker = {
 
     tickMethod: defaultTickMethod,
 
-    maxClearCountPerTick: 100,
-    maxUpdateCountPerTick: 100,
+    maxUpdateTime: 12,
+    maxClearTime: 3,
 
     _willTick: false,
 
     _tick() {
         if (!Ticker._willTick) {
             Ticker.tickMethod(() => {
+                const { maxUpdateTime, maxClearTime } = Ticker;
                 Ticker._willTick = false;
+                let startTime = Date.now();
 
-                let updateCount = 0;
                 _expired.forEach(component => {
-                    if (updateCount++ < Ticker.maxUpdateCountPerTick) {
+                    if (Date.now() - startTime < maxUpdateTime) {
                         const { state, updateRequestCallbacks, _forceUp } = component;
                         let newState = _copy(state),
                             t;
@@ -43,8 +44,8 @@ export const Ticker = {
                                 component._forceUp = false;
                                 const snapshot = component.onWillUpdate(state);
                                 component.state = newState;
-                                component.onDidUpdate(snapshot);
                                 _upCom(component);
+                                component.onDidUpdate(snapshot);
                             }
                         } catch (error) {
                             component.onUncaughtError(error);
@@ -53,10 +54,9 @@ export const Ticker = {
                     _expired.delete(component);
                 });
 
-                const { maxClearCountPerTick } = Ticker;
-                let hasElementDeleted = true,
-                    clearCount = 0;
-                while (hasElementDeleted && clearCount++ < maxClearCountPerTick) {
+                startTime = Date.now();
+                let hasElementDeleted = true;
+                while (hasElementDeleted && Date.now() - startTime < maxClearTime) {
                     hasElementDeleted = false;
                     _eleMap.forEach((element, component) => {
                         const { node } = element;
@@ -80,7 +80,7 @@ export const Ticker = {
         }
     },
 
-    _upCom(component: Component<any>) {
+    _mark(component: Component<any>) {
         _expired.add(component);
         Ticker._tick();
     }

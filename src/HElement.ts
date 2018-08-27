@@ -1,4 +1,4 @@
-import { RawProps, Props, _crtNode, _crtCom } from "./props";
+import { RawProps, Props, _crtNode, _getCom } from "./props";
 import { ComponentGetter, ComponentConstructor, Component, Context } from "./Component";
 import { _flatten } from "./utils";
 
@@ -58,7 +58,7 @@ export class HElement<P extends RawProps = RawProps> {
             node = document.createElement(type);
             _crtNode(props, node, this.context);
         } else {
-            const { element, component } = _crtCom<P>(type, props, this.context),
+            const { element, component } = _getCom<P>(type, props, this.context),
                 parsedElement = _toEle(element);
             // @ts-ignore
             if (type === Context) {

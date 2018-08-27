@@ -59,7 +59,7 @@ const eventPattern = /^on(\w+)$/i,
     captruePattern = /capture/i,
     nonpassivePattern = /nonpassive/i,
     oncePattern = /once/i;
-export function _slcEName(
+export function _getEName(
     rawEvent: string, useCapture: boolean, nonpassive: boolean, once: boolean
 ) {
     let t = 0;
@@ -94,7 +94,7 @@ export function _crtNode(props: Props, node: Node, context: any) {
                 capture = captruePattern.test(rawEvent),
                 nonpassive = nonpassivePattern.test(rawEvent),
                 once = oncePattern.test(rawEvent),
-                event = _slcEName(rawEvent, capture, nonpassive, once);
+                event = _getEName(rawEvent, capture, nonpassive, once);
             node.addEventListener(event, value, _getEOpt(capture, nonpassive, once));
         } else if (!(key in node) && ('setAttribute' in node)) {
             (node as Element).setAttribute(key, value);
@@ -105,15 +105,15 @@ export function _crtNode(props: Props, node: Node, context: any) {
     }
 }
 
-export interface CreateComponentResult<P extends RawProps = RawProps> {
+export interface GetComponentResult<P extends RawProps = RawProps> {
     element: any;
     component: Component<P> | null;
 }
-export function _crtCom<P extends RawProps = RawProps>(
+export function _getCom<P extends RawProps = RawProps>(
     componentGetter: ComponentGetter<P>, props: Props & P, context: any
 ) {
 
-    const result: CreateComponentResult<P> = { element: null, component: null };
+    const result: GetComponentResult<P> = { element: null, component: null };
 
     if (componentGetter.prototype instanceof Component) {
         const component = result.component = new (componentGetter as ComponentConstructor<P>)(props, context);

@@ -78,7 +78,7 @@ export abstract class Component<P extends RawProps = RawProps, S = any, SS = any
 
     requestUpdate(callback: UpdateRequestCallback<S>) {
         this.updateRequestCallbacks.push(callback);
-        Ticker._upCom(this);
+        Ticker._mark(this);
         return this;
     }
     update(newState: S extends object ? Partial<S> : S) {
@@ -92,7 +92,7 @@ export abstract class Component<P extends RawProps = RawProps, S = any, SS = any
     }
     forceUpdate() {
         this._forceUp = true;
-        Ticker._upCom(this);
+        Ticker._mark(this);
         return this;
     }
 
