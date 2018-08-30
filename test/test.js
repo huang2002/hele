@@ -143,4 +143,9 @@ render((HEle.createElement(Context, { value: { color0: 'lightblue' } },
     HEle.createElement("br", null),
     HEle.createElement("br", null),
     HEle.createElement(Catcher, null,
-        HEle.createElement(ErrorComponent, null)))), document.getElementById('root'));
+        HEle.createElement(ErrorComponent, null)),
+    HEle.createElement("br", null),
+    HEle.createElement(Catcher, null,
+        HEle.createElement("div", null,
+            HEle.createElement(ErrorComponent, null))),
+    HEle.createElement("br", null))), document.getElementById('root'));

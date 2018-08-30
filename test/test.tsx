@@ -191,6 +191,13 @@ render(
             <Catcher>
                 <ErrorComponent />
             </Catcher>
+            <br />
+            <Catcher>
+                <div>
+                    <ErrorComponent />
+                </div>
+            </Catcher>
+            <br />
         </Context>
     ),
     document.getElementById('root')!
