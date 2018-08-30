@@ -23,22 +23,27 @@ export const Ticker = {
     _tick() {
         if (!Ticker._willTick) {
             Ticker.tickMethod(() => {
-                const { maxUpdateTime, maxClearTime } = Ticker;
                 Ticker._willTick = false;
+
+                const { maxUpdateTime, maxClearTime } = Ticker;
+
                 let startTime = Date.now();
 
                 _expired.forEach(component => {
                     if (Date.now() - startTime < maxUpdateTime) {
-                        const { state, updateRequestCallbacks, _forceUp } = component;
+                        _expired.delete(component);
+                        const { state, updateRequestCallbacks, _forceUp } = component,
+                            callbacks = updateRequestCallbacks.slice(0),
+                            callbackCount = callbacks.length;
                         let newState = _copy(state),
                             t;
-                        updateRequestCallbacks.forEach(callback => {
+                        callbacks.forEach(callback => {
                             t = callback(newState);
                             if (t !== undefined) {
                                 newState = t;
                             }
                         });
-                        updateRequestCallbacks.length = 0;
+                        component.updateRequestCallbacks = updateRequestCallbacks.slice(callbackCount);
                         try {
                             if (_forceUp || component.shouldUpdate(state, newState)) {
                                 component._forceUp = false;
@@ -48,11 +53,14 @@ export const Ticker = {
                                 component.onDidUpdate(snapshot);
                             }
                         } catch (error) {
-                            component.onUncaughtError(error);
+                            component.onCaughtError(error);
                         }
                     }
-                    _expired.delete(component);
                 });
+
+                if (_expired.size) {
+                    Ticker._tick();
+                }
 
                 startTime = Date.now();
                 let hasElementDeleted = true;
@@ -68,7 +76,7 @@ export const Ticker = {
                                     _eleMap.delete(component);
                                     component.onDidUnmount();
                                 } catch (error) {
-                                    component.onUncaughtError(error);
+                                    component.onCaughtError(error);
                                 }
                             }
                         }

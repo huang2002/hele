@@ -3,7 +3,8 @@
 const { render, Component, Fragment, Portal, Context, Reference } = HEle;
 const commonHooks = [
     'onWillMount', 'onDidMount',
-    'onWillUnmount', 'onDidUnmount'
+    'onWillUnmount', 'onDidUnmount',
+    'onCaughtError'
 ], optionalHooks = [
     'onWillUpdate', 'onDidUpdate'
 ];
@@ -110,6 +111,20 @@ class Lazybone extends Component {
     }
 }
 logHooks(Lazybone);
+const ErrorComponent = () => { throw "Error."; };
+class Catcher extends Component {
+    constructor(props, context) {
+        super(props, context);
+        this.state = null;
+    }
+    render() {
+        return this.state ? 'Succeeded to catch the error!' : this.props.children;
+    }
+    onCaughtError(error) {
+        this.update(error);
+    }
+}
+logHooks(Catcher);
 const appRef = new Reference(), lazyboneRef = new Reference();
 render((HEle.createElement(Context, { value: { color0: 'lightblue' } },
     HEle.createElement(Context, { value: { color1: 'purple' } },
@@ -121,6 +136,11 @@ render((HEle.createElement(Context, { value: { color0: 'lightblue' } },
             HEle.createElement(Counter, null),
             HEle.createElement(Portal, null,
                 HEle.createElement(Clock, { colorId: "1" })))),
+    HEle.createElement("br", null),
     HEle.createElement(Lazybone, { ref: lazyboneRef }),
     HEle.createElement("br", null),
-    HEle.createElement("button", { onclick: () => { lazyboneRef.current.forceUpdate(); } }, "tick"))), document.getElementById('root'));
+    HEle.createElement("button", { onclick: () => { lazyboneRef.current.forceUpdate(); } }, "tick"),
+    HEle.createElement("br", null),
+    HEle.createElement("br", null),
+    HEle.createElement(Catcher, null,
+        HEle.createElement(ErrorComponent, null)))), document.getElementById('root'));

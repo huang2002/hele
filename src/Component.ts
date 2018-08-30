@@ -46,7 +46,7 @@ export abstract class Component<P extends RawProps = RawProps, S = any, SS = any
                 return result;
             }
         } catch (error) {
-            this.onUncaughtError(error);
+            this.onCaughtError(error);
             return null;
         }
     }
@@ -61,8 +61,8 @@ export abstract class Component<P extends RawProps = RawProps, S = any, SS = any
     onDidUpdate(snapShot: SS) { }
     onWillUnmount() { }
     onDidUnmount() { }
-    onUncaughtError(error: Error) {
-        console.error('UncaughtError:', error);
+    onCaughtError(error: Error) {
+        throw error;
     }
 
     createRef<T extends Node | Component = Node | Component>(name: string) {
@@ -90,9 +90,14 @@ export abstract class Component<P extends RawProps = RawProps, S = any, SS = any
             }
         });
     }
-    forceUpdate() {
+    forceUpdate(newState?: S extends object ? Partial<S> : S) {
         this._forceUp = true;
-        Ticker._mark(this);
+        if (arguments.length) {
+            // @ts-ignore
+            this.update(newState);
+        } else {
+            Ticker._mark(this);
+        }
         return this;
     }
 

@@ -73,15 +73,22 @@ export class HElement<P extends RawProps = RawProps> {
                     }
                 });
             }
-            node = parsedElement instanceof Array ?
-                _flatten<Node>(parsedElement.map(_toNode)) :
-                _toNode(parsedElement);
             if (component) {
                 _eleMap.set(component, this);
-                try {
+            }
+            try {
+                node = parsedElement instanceof Array ?
+                    _flatten<Node>(parsedElement.map(_toNode)) :
+                    _toNode(parsedElement);
+                if (component) {
                     component.onDidMount();
-                } catch (error) {
-                    component.onUncaughtError(error);
+                }
+            } catch (error) {
+                node = document.createTextNode('');
+                if (component) {
+                    component.onCaughtError(error);
+                } else {
+                    throw error;
                 }
             }
         }

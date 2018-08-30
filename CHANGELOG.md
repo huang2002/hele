@@ -1,3 +1,9 @@
+## 0.16.0 - 2018-08-30
+
+- Rename `component.onUncaughtError` `component.onCaughtError`
+- Add optional `newState` parameter to `component.forceUpdate`
+- Fix some bugs
+
 ## 0.15.0 - 2018-08-27
 
 - Remove `Ticker.maxUpdateCountPerTick` & `Ticker.maxClearCountPerTick`

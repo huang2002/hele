@@ -4,7 +4,8 @@ const { render, Component, Fragment, Portal, Context, Reference } = HEle;
 
 const commonHooks = [
     'onWillMount', 'onDidMount',
-    'onWillUnmount', 'onDidUnmount'
+    'onWillUnmount', 'onDidUnmount',
+    'onCaughtError'
 ], optionalHooks = [
     'onWillUpdate', 'onDidUpdate'
 ];
@@ -147,6 +148,22 @@ class Lazybone extends Component {
 }
 logHooks(Lazybone);
 
+const ErrorComponent = () => { throw "Error."; };
+
+class Catcher extends Component<{}, Error | null> {
+    constructor(props: {}, context: any) {
+        super(props, context);
+        this.state = null;
+    }
+    render() {
+        return this.state ? 'Succeeded to catch the error!' : this.props.children;
+    }
+    onCaughtError(error: Error) {
+        this.update(error);
+    }
+}
+logHooks(Catcher);
+
 const appRef = new Reference(),
     lazyboneRef = new Reference<Lazybone>();
 render(
@@ -165,9 +182,15 @@ render(
                     </Portal>
                 </div>
             </Context>
+            <br />
             <Lazybone ref={lazyboneRef} />
             <br />
             <button onclick={() => { lazyboneRef.current!.forceUpdate() }}>tick</button>
+            <br />
+            <br />
+            <Catcher>
+                <ErrorComponent />
+            </Catcher>
         </Context>
     ),
     document.getElementById('root')!

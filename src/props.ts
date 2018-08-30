@@ -126,7 +126,7 @@ export function _getCom<P extends RawProps = RawProps>(
         try {
             component.onWillMount();
         } catch (error) {
-            component.onUncaughtError(error);
+            component.onCaughtError(error);
         }
         result.element = component.toElement();
     } else {
