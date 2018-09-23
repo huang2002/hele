@@ -1,3 +1,7 @@
+### 0.17.1 - 2018-09-23
+
+- Fix a bug
+
 ## 0.17.0 - 2018-09-23
 
 - Add namespace support

@@ -69,7 +69,8 @@ export const Ticker = {
                     _eleMap.forEach((element, component) => {
                         const { node } = element;
                         if (node) {
-                            if (!(node instanceof Array ? node[0] : node).parentNode) {
+                            const tempNode = (node instanceof Array ? node[0] : node);
+                            if (!tempNode || !tempNode.parentNode) {
                                 hasElementDeleted = true;
                                 try {
                                     component.onWillUnmount();
