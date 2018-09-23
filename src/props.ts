@@ -42,7 +42,8 @@ export const specialNodePropProcessors = new Map<string, SpecialPropProcessor<No
                     classNames.filter(name => typeof name === 'string').join(' ')
             );
         }
-    }]
+    }],
+    ['no-xmlns', () => { }]
 ]);
 export const specialComponentPropProcessors = new Map<string, SpecialPropProcessor<Component<any>>>([
     ['ref', (ref: Reference, component) => {
@@ -99,8 +100,12 @@ export function _crtNode(props: Props, node: Node, context: any) {
         } else if (!(key in node) && ('setAttribute' in node)) {
             (node as Element).setAttribute(key, value);
         } else {
-            // @ts-ignore
-            node[key] = value;
+            try {
+                // @ts-ignore
+                node[key] = value;
+            } catch (err) {
+                (node as Element).setAttribute(key, value);
+            }
         }
     }
 }

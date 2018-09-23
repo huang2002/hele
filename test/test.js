@@ -148,4 +148,7 @@ render((HEle.createElement(Context, { value: { color0: 'lightblue' } },
     HEle.createElement(Catcher, null,
         HEle.createElement("div", null,
             HEle.createElement(ErrorComponent, null))),
-    HEle.createElement("br", null))), document.getElementById('root'));
+    HEle.createElement("br", null),
+    HEle.createElement("svg", { width: "100", height: "100" },
+        HEle.createElement("circle", { cx: "50", cy: "50", r: "30", fill: "yellow", stroke: "red" }),
+        HEle.createElement("path", { d: "M 30 60 C 35 75 65 75 70 60", fill: "none", stroke: "red" })))), document.getElementById('root'));

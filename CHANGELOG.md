@@ -1,7 +1,12 @@
+## 0.17.0 - 2018-09-23
+
+- Add namespace support
+- Improve some internals
+
 ## 0.16.0 - 2018-08-30
 
 - Rename `component.onUncaughtError` `component.onCaughtError`
-- Add optional `newState` parameter to `component.forceUpdate`
+- Add an optional `newState` parameter to `component.forceUpdate`
 - Fix some bugs
 
 ## 0.15.0 - 2018-08-27

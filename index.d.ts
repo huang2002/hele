@@ -11,6 +11,8 @@ declare global {
             [name: string]: HEle.RawProps & {
                 style?: string | { [key: string]: string };
                 class?: string | any[];
+                'no-xmlns'?: boolean;
+                xmlns?: string;
             };
         }
 

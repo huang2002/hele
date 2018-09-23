@@ -1,8 +1,14 @@
 import { RawProps, Props, _crtNode, _getCom } from "./props";
 import { ComponentGetter, ComponentConstructor, Component, Context } from "./Component";
-import { _flatten } from "./utils";
+import { _flatten, _copy } from "./utils";
 
 export const _eleMap = new Map<Component<any>, HElement<any>>();
+
+export const namespaces = new Map([
+    ['svg', 'http://www.w3.org/2000/svg']
+]);
+
+export const _nsCtxName = '_xmlns';
 
 export function _toEle(element: any): HElement<any> | null | (HElement<any> | null)[] {
     if (element instanceof HElement) {
@@ -51,14 +57,22 @@ export class HElement<P extends RawProps = RawProps> {
 
     toNode(): Node | Node[] {
         const { type, props } = this;
-        let node;
+        let node: Node | Node[];
         if (type === null) {
             node = document.createTextNode(props.children[0]);
         } else if (typeof type === 'string') {
-            node = document.createElement(type);
-            _crtNode(props, node, this.context);
+            const context = _copy(this.context),
+                xmlns = !props['no-xmlns'] &&
+                    (props.xmlns || namespaces.get(type) || context[_nsCtxName]);
+            node = xmlns ?
+                document.createElementNS(xmlns, type) :
+                document.createElement(type);
+            if (xmlns) {
+                context[_nsCtxName] = xmlns;
+            }
+            _crtNode(props, node, context);
         } else {
-            const { element, component } = _getCom<P>(type, props, this.context),
+            const { element, component } = _getCom<P>(type, props, _copy(this.context)),
                 parsedElement = _toEle(element);
             // @ts-ignore
             if (type === Context) {
@@ -69,7 +83,7 @@ export class HElement<P extends RawProps = RawProps> {
                 _flatten<HElement | null>([parsedElement]).forEach(ele => {
                     if (ele) {
                         ele.parent = this;
-                        ele.context = context;
+                        ele.context = _copy(context);
                     }
                 });
             }

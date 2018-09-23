@@ -198,6 +198,10 @@ render(
                 </div>
             </Catcher>
             <br />
+            <svg width="100" height="100">
+                <circle cx="50" cy="50" r="30" fill="yellow" stroke="red" />
+                <path d="M 30 60 C 35 75 65 75 70 60" fill="none" stroke="red" />
+            </svg>
         </Context>
     ),
     document.getElementById('root')!
